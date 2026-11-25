@@ -1,0 +1,159 @@
+/* 12 栏编辑部布局与跨端响应式断点 */
+
+.page {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* 左侧头版：桌面占 8 栏 */
+.editorial {
+  grid-column: span 8;
+  padding: var(--sp-8) var(--sp-10);
+  min-width: 0;
+}
+
+/* 右侧问询台：桌面占 4 栏并吸顶全高 */
+.desk {
+  grid-column: span 4;
+  background: var(--desk);
+  color: var(--desk-fg);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* 图表与对照区 12 栏子网格 */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--sp-8) var(--sp-10);
+  padding-top: var(--sp-6);
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.col-7 {
+  grid-column: span 7;
+  min-width: 0;
+}
+
+.col-5 {
+  grid-column: span 5;
+  min-width: 0;
+}
+
+/* 移动端抽屉入口与遮罩在桌面端隐藏 */
+.mobile-desk-fab,
+.desk-handle,
+.desk-close,
+.desk-backdrop {
+  display: none;
+}
+
+/* 平板与移动端（< 1024px）：纯净用户态 + 按需展开底部抽屉 */
+@media (max-width: 1023.98px) {
+  .page {
+    display: block;
+  }
+
+  .editorial {
+    padding: var(--sp-5) var(--sp-4) calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+  }
+
+  .col-7,
+  .col-5 {
+    grid-column: span 1;
+  }
+
+  .desk {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    height: 85vh;
+    height: 85dvh;
+    z-index: 70;
+    transform: translateY(100%);
+    transition: transform var(--dur-mid) ease;
+    border-top: 1px solid var(--desk-rule);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .desk.open {
+    transform: translateY(0);
+  }
+
+  .desk-backdrop.open {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: var(--backdrop);
+    z-index: 65;
+  }
+
+  .desk-handle {
+    display: flex;
+    justify-content: center;
+    padding: var(--sp-2) 0 0;
+  }
+
+  .desk-handle-bar {
+    width: 36px;
+    height: 4px;
+    background: var(--desk-rule);
+    border-radius: var(--radius);
+  }
+
+  .desk-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fs-13);
+    color: var(--desk-mute);
+    padding: var(--sp-1) var(--sp-2);
+    border: 1px solid var(--desk-rule);
+    border-radius: var(--radius);
+  }
+
+  /* 移动端隐藏内部技术栈模型徽章，保持纯净用户态 */
+  .desk-model-badge {
+    display: none;
+  }
+
+  /* 移动端底部轻量问询台入口 */
+  .mobile-desk-fab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: var(--desk);
+    color: var(--desk-fg);
+    border-top: 1px solid var(--desk-rule);
+    padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom));
+  }
+}
+
+/* 手机窄屏（< 640px）：KPI 2×2，头条字号微调 */
+@media (max-width: 639.98px) {
+  .editorial {
+    padding: var(--sp-4) var(--sp-4) calc(84px + env(safe-area-inset-bottom));
+  }
+}

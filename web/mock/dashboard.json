@@ -1,0 +1,1833 @@
+{
+  "全部": {
+    "city": null,
+    "cities": [
+      "深圳",
+      "广州",
+      "东莞"
+    ],
+    "kpi": {
+      "total_jobs": 232,
+      "avg_salary": 29.3,
+      "median_salary": 28.1,
+      "fresh_grad_count": 95,
+      "fresh_grad_rate": 40.9,
+      "max_salary": 75.8,
+      "max_salary_job": {
+        "id": 47,
+        "title": "深度学习算法工程师",
+        "company": "中科人工智能研究院",
+        "city": "深圳",
+        "category": "算法工程师",
+        "salary_min": 39.7,
+        "salary_max": 75.8,
+        "salary_avg": 57.8
+      },
+      "weekly_new": 49
+    },
+    "skills_top": [
+      {
+        "skill": "Python",
+        "count": 127,
+        "rate": 54.7
+      },
+      {
+        "skill": "LLM",
+        "count": 115,
+        "rate": 49.6
+      },
+      {
+        "skill": "RAG",
+        "count": 92,
+        "rate": 39.7
+      },
+      {
+        "skill": "FastAPI",
+        "count": 67,
+        "rate": 28.9
+      },
+      {
+        "skill": "Dify",
+        "count": 50,
+        "rate": 21.6
+      },
+      {
+        "skill": "LangGraph",
+        "count": 48,
+        "rate": 20.7
+      },
+      {
+        "skill": "Function Calling",
+        "count": 47,
+        "rate": 20.3
+      },
+      {
+        "skill": "Prompt Engineering",
+        "count": 46,
+        "rate": 19.8
+      },
+      {
+        "skill": "SQL",
+        "count": 44,
+        "rate": 19.0
+      },
+      {
+        "skill": "Agent",
+        "count": 42,
+        "rate": 18.1
+      }
+    ],
+    "city_compare": [
+      {
+        "city": "深圳",
+        "job_count": 105,
+        "avg_salary": 30.8,
+        "median_salary": 29.4,
+        "fresh_grad_count": 44,
+        "fresh_grad_rate": 41.9
+      },
+      {
+        "city": "广州",
+        "job_count": 85,
+        "avg_salary": 29.1,
+        "median_salary": 29.1,
+        "fresh_grad_count": 36,
+        "fresh_grad_rate": 42.4
+      },
+      {
+        "city": "东莞",
+        "job_count": 42,
+        "avg_salary": 26.0,
+        "median_salary": 24.4,
+        "fresh_grad_count": 15,
+        "fresh_grad_rate": 35.7
+      }
+    ],
+    "exp_salary": [
+      {
+        "experience": "经验不限",
+        "job_count": 45,
+        "avg_salary": 24.9
+      },
+      {
+        "experience": "应届生",
+        "job_count": 32,
+        "avg_salary": 20.2
+      },
+      {
+        "experience": "1年以内",
+        "job_count": 21,
+        "avg_salary": 23.0
+      },
+      {
+        "experience": "1-3年",
+        "job_count": 50,
+        "avg_salary": 28.0
+      },
+      {
+        "experience": "3-5年",
+        "job_count": 59,
+        "avg_salary": 34.7
+      },
+      {
+        "experience": "5年以上",
+        "job_count": 25,
+        "avg_salary": 43.9
+      }
+    ],
+    "category_mix": [
+      {
+        "category": "大模型应用开发",
+        "count": 38,
+        "rate": 16.4
+      },
+      {
+        "category": "Agent 架构师",
+        "count": 33,
+        "rate": 14.2
+      },
+      {
+        "category": "全栈 AI 开发",
+        "count": 33,
+        "rate": 14.2
+      },
+      {
+        "category": "AI 产品经理",
+        "count": 32,
+        "rate": 13.8
+      },
+      {
+        "category": "AI 平台与推理工程",
+        "count": 32,
+        "rate": 13.8
+      },
+      {
+        "category": "其他",
+        "count": 64,
+        "rate": 27.6
+      }
+    ],
+    "latest": [
+      {
+        "id": 133,
+        "title": "AIGC 前端与服务端工程师",
+        "company": "微光智能科技有限公司",
+        "city": "广州",
+        "district": "黄埔区",
+        "category": "全栈 AI 开发",
+        "salary_min": 14.7,
+        "salary_max": 27.6,
+        "salary_avg": 21.1,
+        "experience": "经验不限",
+        "education": "博士",
+        "fresh_grad_friendly": 1,
+        "source": "user_submit",
+        "created_at": "2026-04-15 17:00:00",
+        "skills": [
+          "Docker",
+          "LLM",
+          "React",
+          "FastAPI",
+          "OpenAI API"
+        ]
+      },
+      {
+        "id": 53,
+        "title": "RAG 知识库研发工程师",
+        "company": "飞鸟人工智能研究院",
+        "city": "深圳",
+        "district": "龙岗区",
+        "category": "大模型应用开发",
+        "salary_min": 16.2,
+        "salary_max": 30.6,
+        "salary_avg": 23.4,
+        "experience": "应届生",
+        "education": "本科",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 12:00:00",
+        "skills": [
+          "LLM",
+          "Prompt Engineering",
+          "FastAPI",
+          "Python",
+          "LangGraph",
+          "VectorDB"
+        ]
+      },
+      {
+        "id": 21,
+        "title": "智能工作流开发工程师",
+        "company": "岭南软件有限公司",
+        "city": "深圳",
+        "district": "南山区",
+        "category": "全栈 AI 开发",
+        "salary_min": 17.3,
+        "salary_max": 32.4,
+        "salary_avg": 24.9,
+        "experience": "1-3年",
+        "education": "博士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 12:00:00",
+        "skills": [
+          "SQL",
+          "Python",
+          "Docker",
+          "TypeScript",
+          "LLM",
+          "OpenAI API"
+        ]
+      },
+      {
+        "id": 207,
+        "title": "AI 全栈开发工程师",
+        "company": "数聚人工智能研究院",
+        "city": "东莞",
+        "district": "南城区",
+        "category": "全栈 AI 开发",
+        "salary_min": 12.1,
+        "salary_max": 22.7,
+        "salary_avg": 17.4,
+        "experience": "经验不限",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 00:00:00",
+        "skills": [
+          "FastAPI",
+          "Python",
+          "TypeScript",
+          "SQL",
+          "React"
+        ]
+      },
+      {
+        "id": 5,
+        "title": "大模型微调算法工程师",
+        "company": "中科信息科技有限公司",
+        "city": "深圳",
+        "district": "福田区",
+        "category": "算法工程师",
+        "salary_min": 20.0,
+        "salary_max": 38.1,
+        "salary_avg": 29.1,
+        "experience": "经验不限",
+        "education": "不限",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 15:00:00",
+        "skills": [
+          "CUDA",
+          "RLHF",
+          "LLM",
+          "PyTorch",
+          "Python"
+        ]
+      },
+      {
+        "id": 187,
+        "title": "深度学习算法工程师",
+        "company": "星澜软件有限公司",
+        "city": "广州",
+        "district": "越秀区",
+        "category": "算法工程师",
+        "salary_min": 18.2,
+        "salary_max": 34.7,
+        "salary_avg": 26.5,
+        "experience": "1年以内",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 13:00:00",
+        "skills": [
+          "NLP",
+          "RLHF",
+          "LLM",
+          "LoRA",
+          "Transformers"
+        ]
+      },
+      {
+        "id": 129,
+        "title": "智能体产品经理",
+        "company": "矩量智能科技有限公司",
+        "city": "广州",
+        "district": "海珠区",
+        "category": "AI 产品经理",
+        "salary_min": 20.7,
+        "salary_max": 38.7,
+        "salary_avg": 29.7,
+        "experience": "3-5年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 11:00:00",
+        "skills": [
+          "LLM Eval",
+          "LLM",
+          "Coze",
+          "Dify",
+          "RAG"
+        ]
+      },
+      {
+        "id": 218,
+        "title": "LLM 后端开发工程师",
+        "company": "星澜软件有限公司",
+        "city": "东莞",
+        "district": "长安镇",
+        "category": "大模型应用开发",
+        "salary_min": 15.5,
+        "salary_max": 29.3,
+        "salary_avg": 22.4,
+        "experience": "1-3年",
+        "education": "博士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 05:00:00",
+        "skills": [
+          "LLM",
+          "Prompt Engineering",
+          "Python",
+          "Function Calling",
+          "VectorDB",
+          "LangGraph"
+        ]
+      },
+      {
+        "id": 158,
+        "title": "大模型应用开发工程师",
+        "company": "千帆信息科技有限公司",
+        "city": "广州",
+        "district": "天河区",
+        "category": "大模型应用开发",
+        "salary_min": 15.0,
+        "salary_max": 28.3,
+        "salary_avg": 21.6,
+        "experience": "经验不限",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 05:00:00",
+        "skills": [
+          "Function Calling",
+          "Prompt Engineering",
+          "LLM",
+          "FastAPI"
+        ]
+      },
+      {
+        "id": 69,
+        "title": "AI 数据研发工程师",
+        "company": "光年信息科技有限公司",
+        "city": "深圳",
+        "district": "福田区",
+        "category": "数据与检索工程",
+        "salary_min": 14.8,
+        "salary_max": 27.8,
+        "salary_avg": 21.3,
+        "experience": "1年以内",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 01:00:00",
+        "skills": [
+          "Elasticsearch",
+          "RAG",
+          "Rerank",
+          "Python",
+          "Milvus",
+          "PostgreSQL"
+        ]
+      },
+      {
+        "id": 185,
+        "title": "AI 应用产品经理",
+        "company": "星澜智能科技有限公司",
+        "city": "广州",
+        "district": "海珠区",
+        "category": "AI 产品经理",
+        "salary_min": 14.4,
+        "salary_max": 26.9,
+        "salary_avg": 20.6,
+        "experience": "1-3年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 23:00:00",
+        "skills": [
+          "LLM",
+          "LLM Eval",
+          "Agent",
+          "Coze"
+        ]
+      },
+      {
+        "id": 183,
+        "title": "AI Agent 研发工程师",
+        "company": "千帆数智技术有限公司",
+        "city": "广州",
+        "district": "黄埔区",
+        "category": "Agent 架构师",
+        "salary_min": 22.2,
+        "salary_max": 41.6,
+        "salary_avg": 31.9,
+        "experience": "1-3年",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 22:00:00",
+        "skills": [
+          "LangGraph",
+          "MCP",
+          "Python",
+          "Dify",
+          "Function Calling"
+        ]
+      }
+    ],
+    "meta": {
+      "sample_size": 232,
+      "total_in_db": 232,
+      "source_counts": {
+        "demo_seed": 232
+      },
+      "has_demo_data": true,
+      "source_note": "公开岗位建模样本（含演示数据，演示环境每日重置）",
+      "updated_at": "2026-04-15 17:00:00"
+    }
+  },
+  "深圳": {
+    "city": "深圳",
+    "cities": [
+      "深圳",
+      "广州",
+      "东莞"
+    ],
+    "kpi": {
+      "total_jobs": 105,
+      "avg_salary": 30.8,
+      "median_salary": 29.4,
+      "fresh_grad_count": 44,
+      "fresh_grad_rate": 41.9,
+      "max_salary": 75.8,
+      "max_salary_job": {
+        "id": 47,
+        "title": "深度学习算法工程师",
+        "company": "中科人工智能研究院",
+        "city": "深圳",
+        "category": "算法工程师",
+        "salary_min": 39.7,
+        "salary_max": 75.8,
+        "salary_avg": 57.8
+      },
+      "weekly_new": 17
+    },
+    "skills_top": [
+      {
+        "skill": "Python",
+        "count": 57,
+        "rate": 54.3
+      },
+      {
+        "skill": "LLM",
+        "count": 44,
+        "rate": 41.9
+      },
+      {
+        "skill": "RAG",
+        "count": 44,
+        "rate": 41.9
+      },
+      {
+        "skill": "FastAPI",
+        "count": 27,
+        "rate": 25.7
+      },
+      {
+        "skill": "Dify",
+        "count": 24,
+        "rate": 22.9
+      },
+      {
+        "skill": "LangGraph",
+        "count": 22,
+        "rate": 21.0
+      },
+      {
+        "skill": "Agent",
+        "count": 21,
+        "rate": 20.0
+      },
+      {
+        "skill": "Function Calling",
+        "count": 19,
+        "rate": 18.1
+      },
+      {
+        "skill": "SQL",
+        "count": 19,
+        "rate": 18.1
+      },
+      {
+        "skill": "CUDA",
+        "count": 17,
+        "rate": 16.2
+      }
+    ],
+    "city_compare": [
+      {
+        "city": "深圳",
+        "job_count": 105,
+        "avg_salary": 30.8,
+        "median_salary": 29.4,
+        "fresh_grad_count": 44,
+        "fresh_grad_rate": 41.9
+      },
+      {
+        "city": "广州",
+        "job_count": 85,
+        "avg_salary": 29.1,
+        "median_salary": 29.1,
+        "fresh_grad_count": 36,
+        "fresh_grad_rate": 42.4
+      },
+      {
+        "city": "东莞",
+        "job_count": 42,
+        "avg_salary": 26.0,
+        "median_salary": 24.4,
+        "fresh_grad_count": 15,
+        "fresh_grad_rate": 35.7
+      }
+    ],
+    "exp_salary": [
+      {
+        "experience": "经验不限",
+        "job_count": 21,
+        "avg_salary": 26.8
+      },
+      {
+        "experience": "应届生",
+        "job_count": 15,
+        "avg_salary": 22.9
+      },
+      {
+        "experience": "1年以内",
+        "job_count": 12,
+        "avg_salary": 24.7
+      },
+      {
+        "experience": "1-3年",
+        "job_count": 22,
+        "avg_salary": 29.9
+      },
+      {
+        "experience": "3-5年",
+        "job_count": 26,
+        "avg_salary": 37.0
+      },
+      {
+        "experience": "5年以上",
+        "job_count": 9,
+        "avg_salary": 45.7
+      }
+    ],
+    "category_mix": [
+      {
+        "category": "AI 产品经理",
+        "count": 15,
+        "rate": 14.3
+      },
+      {
+        "category": "AI 平台与推理工程",
+        "count": 15,
+        "rate": 14.3
+      },
+      {
+        "category": "Agent 架构师",
+        "count": 15,
+        "rate": 14.3
+      },
+      {
+        "category": "全栈 AI 开发",
+        "count": 15,
+        "rate": 14.3
+      },
+      {
+        "category": "大模型应用开发",
+        "count": 15,
+        "rate": 14.3
+      },
+      {
+        "category": "其他",
+        "count": 30,
+        "rate": 28.6
+      }
+    ],
+    "latest": [
+      {
+        "id": 53,
+        "title": "RAG 知识库研发工程师",
+        "company": "飞鸟人工智能研究院",
+        "city": "深圳",
+        "district": "龙岗区",
+        "category": "大模型应用开发",
+        "salary_min": 16.2,
+        "salary_max": 30.6,
+        "salary_avg": 23.4,
+        "experience": "应届生",
+        "education": "本科",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 12:00:00",
+        "skills": [
+          "LLM",
+          "Prompt Engineering",
+          "FastAPI",
+          "Python",
+          "LangGraph",
+          "VectorDB"
+        ]
+      },
+      {
+        "id": 21,
+        "title": "智能工作流开发工程师",
+        "company": "岭南软件有限公司",
+        "city": "深圳",
+        "district": "南山区",
+        "category": "全栈 AI 开发",
+        "salary_min": 17.3,
+        "salary_max": 32.4,
+        "salary_avg": 24.9,
+        "experience": "1-3年",
+        "education": "博士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 12:00:00",
+        "skills": [
+          "SQL",
+          "Python",
+          "Docker",
+          "TypeScript",
+          "LLM",
+          "OpenAI API"
+        ]
+      },
+      {
+        "id": 5,
+        "title": "大模型微调算法工程师",
+        "company": "中科信息科技有限公司",
+        "city": "深圳",
+        "district": "福田区",
+        "category": "算法工程师",
+        "salary_min": 20.0,
+        "salary_max": 38.1,
+        "salary_avg": 29.1,
+        "experience": "经验不限",
+        "education": "不限",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 15:00:00",
+        "skills": [
+          "CUDA",
+          "RLHF",
+          "LLM",
+          "PyTorch",
+          "Python"
+        ]
+      },
+      {
+        "id": 69,
+        "title": "AI 数据研发工程师",
+        "company": "光年信息科技有限公司",
+        "city": "深圳",
+        "district": "福田区",
+        "category": "数据与检索工程",
+        "salary_min": 14.8,
+        "salary_max": 27.8,
+        "salary_avg": 21.3,
+        "experience": "1年以内",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 01:00:00",
+        "skills": [
+          "Elasticsearch",
+          "RAG",
+          "Rerank",
+          "Python",
+          "Milvus",
+          "PostgreSQL"
+        ]
+      },
+      {
+        "id": 85,
+        "title": "AI Agent 研发工程师",
+        "company": "明略人工智能研究院",
+        "city": "深圳",
+        "district": "南山区",
+        "category": "Agent 架构师",
+        "salary_min": 37.0,
+        "salary_max": 69.3,
+        "salary_avg": 53.1,
+        "experience": "3-5年",
+        "education": "博士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 00:00:00",
+        "skills": [
+          "Dify",
+          "MCP",
+          "LLM",
+          "RAG",
+          "LangGraph"
+        ]
+      },
+      {
+        "id": 25,
+        "title": "RAG 知识库研发工程师",
+        "company": "云岫智能科技有限公司",
+        "city": "深圳",
+        "district": "南山区",
+        "category": "大模型应用开发",
+        "salary_min": 19.0,
+        "salary_max": 35.8,
+        "salary_avg": 27.4,
+        "experience": "经验不限",
+        "education": "本科",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-12 23:00:00",
+        "skills": [
+          "RAG",
+          "Function Calling",
+          "Prompt Engineering",
+          "LangGraph",
+          "Python"
+        ]
+      },
+      {
+        "id": 84,
+        "title": "智能工作流开发工程师",
+        "company": "新质软件有限公司",
+        "city": "深圳",
+        "district": "龙岗区",
+        "category": "全栈 AI 开发",
+        "salary_min": 19.7,
+        "salary_max": 37.0,
+        "salary_avg": 28.4,
+        "experience": "1-3年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-12 19:00:00",
+        "skills": [
+          "LLM",
+          "React",
+          "TypeScript",
+          "SQL"
+        ]
+      },
+      {
+        "id": 93,
+        "title": "大模型推理优化工程师",
+        "company": "云岫软件有限公司",
+        "city": "深圳",
+        "district": "福田区",
+        "category": "AI 平台与推理工程",
+        "salary_min": 28.4,
+        "salary_max": 54.0,
+        "salary_avg": 41.2,
+        "experience": "3-5年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-12 03:00:00",
+        "skills": [
+          "Redis",
+          "Linux",
+          "vLLM",
+          "CUDA"
+        ]
+      },
+      {
+        "id": 6,
+        "title": "AI 数据研发工程师",
+        "company": "云岫信息科技有限公司",
+        "city": "深圳",
+        "district": "龙岗区",
+        "category": "数据与检索工程",
+        "salary_min": 12.1,
+        "salary_max": 22.7,
+        "salary_avg": 17.4,
+        "experience": "应届生",
+        "education": "不限",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-11 19:00:00",
+        "skills": [
+          "PostgreSQL",
+          "RAG",
+          "Milvus",
+          "Elasticsearch",
+          "SQL",
+          "Embedding"
+        ]
+      },
+      {
+        "id": 99,
+        "title": "多智能体系统工程师",
+        "company": "云岫数智技术有限公司",
+        "city": "深圳",
+        "district": "龙华区",
+        "category": "Agent 架构师",
+        "salary_min": 25.9,
+        "salary_max": 48.6,
+        "salary_avg": 37.2,
+        "experience": "1-3年",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-10 18:00:00",
+        "skills": [
+          "LangGraph",
+          "MCP",
+          "Function Calling",
+          "Dify",
+          "Agent"
+        ]
+      },
+      {
+        "id": 17,
+        "title": "大模型产品经理",
+        "company": "智算智能科技有限公司",
+        "city": "深圳",
+        "district": "龙岗区",
+        "category": "AI 产品经理",
+        "salary_min": 14.0,
+        "salary_max": 26.1,
+        "salary_avg": 20.1,
+        "experience": "1年以内",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-10 03:00:00",
+        "skills": [
+          "LLM",
+          "RAG",
+          "Prompt Engineering",
+          "Agent",
+          "Coze",
+          "LLM Eval"
+        ]
+      },
+      {
+        "id": 51,
+        "title": "大模型推理优化工程师",
+        "company": "锐思智能科技有限公司",
+        "city": "深圳",
+        "district": "龙岗区",
+        "category": "AI 平台与推理工程",
+        "salary_min": 27.3,
+        "salary_max": 51.8,
+        "salary_avg": 39.5,
+        "experience": "3-5年",
+        "education": "博士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-09 17:00:00",
+        "skills": [
+          "FastAPI",
+          "vLLM",
+          "Python",
+          "Linux"
+        ]
+      }
+    ],
+    "meta": {
+      "sample_size": 105,
+      "total_in_db": 232,
+      "source_counts": {
+        "demo_seed": 232
+      },
+      "has_demo_data": true,
+      "source_note": "公开岗位建模样本（含演示数据，演示环境每日重置）",
+      "updated_at": "2026-04-15 17:00:00"
+    }
+  },
+  "广州": {
+    "city": "广州",
+    "cities": [
+      "深圳",
+      "广州",
+      "东莞"
+    ],
+    "kpi": {
+      "total_jobs": 85,
+      "avg_salary": 29.1,
+      "median_salary": 29.1,
+      "fresh_grad_count": 36,
+      "fresh_grad_rate": 42.4,
+      "max_salary": 68.6,
+      "max_salary_job": {
+        "id": 113,
+        "title": "多智能体系统工程师",
+        "company": "新质信息科技有限公司",
+        "city": "广州",
+        "category": "Agent 架构师",
+        "salary_min": 36.6,
+        "salary_max": 68.6,
+        "salary_avg": 52.6
+      },
+      "weekly_new": 19
+    },
+    "skills_top": [
+      {
+        "skill": "LLM",
+        "count": 47,
+        "rate": 55.3
+      },
+      {
+        "skill": "Python",
+        "count": 46,
+        "rate": 54.1
+      },
+      {
+        "skill": "RAG",
+        "count": 32,
+        "rate": 37.6
+      },
+      {
+        "skill": "FastAPI",
+        "count": 26,
+        "rate": 30.6
+      },
+      {
+        "skill": "Prompt Engineering",
+        "count": 21,
+        "rate": 24.7
+      },
+      {
+        "skill": "Docker",
+        "count": 20,
+        "rate": 23.5
+      },
+      {
+        "skill": "Function Calling",
+        "count": 20,
+        "rate": 23.5
+      },
+      {
+        "skill": "LangGraph",
+        "count": 18,
+        "rate": 21.2
+      },
+      {
+        "skill": "SQL",
+        "count": 18,
+        "rate": 21.2
+      },
+      {
+        "skill": "Dify",
+        "count": 17,
+        "rate": 20.0
+      }
+    ],
+    "city_compare": [
+      {
+        "city": "深圳",
+        "job_count": 105,
+        "avg_salary": 30.8,
+        "median_salary": 29.4,
+        "fresh_grad_count": 44,
+        "fresh_grad_rate": 41.9
+      },
+      {
+        "city": "广州",
+        "job_count": 85,
+        "avg_salary": 29.1,
+        "median_salary": 29.1,
+        "fresh_grad_count": 36,
+        "fresh_grad_rate": 42.4
+      },
+      {
+        "city": "东莞",
+        "job_count": 42,
+        "avg_salary": 26.0,
+        "median_salary": 24.4,
+        "fresh_grad_count": 15,
+        "fresh_grad_rate": 35.7
+      }
+    ],
+    "exp_salary": [
+      {
+        "experience": "经验不限",
+        "job_count": 18,
+        "avg_salary": 24.6
+      },
+      {
+        "experience": "应届生",
+        "job_count": 10,
+        "avg_salary": 19.0
+      },
+      {
+        "experience": "1年以内",
+        "job_count": 5,
+        "avg_salary": 19.9
+      },
+      {
+        "experience": "1-3年",
+        "job_count": 19,
+        "avg_salary": 28.0
+      },
+      {
+        "experience": "3-5年",
+        "job_count": 22,
+        "avg_salary": 33.3
+      },
+      {
+        "experience": "5年以上",
+        "job_count": 11,
+        "avg_salary": 43.1
+      }
+    ],
+    "category_mix": [
+      {
+        "category": "大模型应用开发",
+        "count": 17,
+        "rate": 20.0
+      },
+      {
+        "category": "Agent 架构师",
+        "count": 12,
+        "rate": 14.1
+      },
+      {
+        "category": "全栈 AI 开发",
+        "count": 12,
+        "rate": 14.1
+      },
+      {
+        "category": "AI 产品经理",
+        "count": 11,
+        "rate": 12.9
+      },
+      {
+        "category": "AI 平台与推理工程",
+        "count": 11,
+        "rate": 12.9
+      },
+      {
+        "category": "其他",
+        "count": 22,
+        "rate": 25.9
+      }
+    ],
+    "latest": [
+      {
+        "id": 133,
+        "title": "AIGC 前端与服务端工程师",
+        "company": "微光智能科技有限公司",
+        "city": "广州",
+        "district": "黄埔区",
+        "category": "全栈 AI 开发",
+        "salary_min": 14.7,
+        "salary_max": 27.6,
+        "salary_avg": 21.1,
+        "experience": "经验不限",
+        "education": "博士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 17:00:00",
+        "skills": [
+          "Docker",
+          "LLM",
+          "React",
+          "FastAPI",
+          "OpenAI API"
+        ]
+      },
+      {
+        "id": 187,
+        "title": "深度学习算法工程师",
+        "company": "星澜软件有限公司",
+        "city": "广州",
+        "district": "越秀区",
+        "category": "算法工程师",
+        "salary_min": 18.2,
+        "salary_max": 34.7,
+        "salary_avg": 26.5,
+        "experience": "1年以内",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 13:00:00",
+        "skills": [
+          "NLP",
+          "RLHF",
+          "LLM",
+          "LoRA",
+          "Transformers"
+        ]
+      },
+      {
+        "id": 129,
+        "title": "智能体产品经理",
+        "company": "矩量智能科技有限公司",
+        "city": "广州",
+        "district": "海珠区",
+        "category": "AI 产品经理",
+        "salary_min": 20.7,
+        "salary_max": 38.7,
+        "salary_avg": 29.7,
+        "experience": "3-5年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 11:00:00",
+        "skills": [
+          "LLM Eval",
+          "LLM",
+          "Coze",
+          "Dify",
+          "RAG"
+        ]
+      },
+      {
+        "id": 158,
+        "title": "大模型应用开发工程师",
+        "company": "千帆信息科技有限公司",
+        "city": "广州",
+        "district": "天河区",
+        "category": "大模型应用开发",
+        "salary_min": 15.0,
+        "salary_max": 28.3,
+        "salary_avg": 21.6,
+        "experience": "经验不限",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 05:00:00",
+        "skills": [
+          "Function Calling",
+          "Prompt Engineering",
+          "LLM",
+          "FastAPI"
+        ]
+      },
+      {
+        "id": 185,
+        "title": "AI 应用产品经理",
+        "company": "星澜智能科技有限公司",
+        "city": "广州",
+        "district": "海珠区",
+        "category": "AI 产品经理",
+        "salary_min": 14.4,
+        "salary_max": 26.9,
+        "salary_avg": 20.6,
+        "experience": "1-3年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 23:00:00",
+        "skills": [
+          "LLM",
+          "LLM Eval",
+          "Agent",
+          "Coze"
+        ]
+      },
+      {
+        "id": 183,
+        "title": "AI Agent 研发工程师",
+        "company": "千帆数智技术有限公司",
+        "city": "广州",
+        "district": "黄埔区",
+        "category": "Agent 架构师",
+        "salary_min": 22.2,
+        "salary_max": 41.6,
+        "salary_avg": 31.9,
+        "experience": "1-3年",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 22:00:00",
+        "skills": [
+          "LangGraph",
+          "MCP",
+          "Python",
+          "Dify",
+          "Function Calling"
+        ]
+      },
+      {
+        "id": 142,
+        "title": "AI 基础设施工程师",
+        "company": "矩量数智技术有限公司",
+        "city": "广州",
+        "district": "黄埔区",
+        "category": "AI 平台与推理工程",
+        "salary_min": 33.3,
+        "salary_max": 63.3,
+        "salary_avg": 48.3,
+        "experience": "5年以上",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 14:00:00",
+        "skills": [
+          "CUDA",
+          "Python",
+          "Redis",
+          "Docker",
+          "Kubernetes"
+        ]
+      },
+      {
+        "id": 190,
+        "title": "AI Agent 研发工程师",
+        "company": "云岫数智技术有限公司",
+        "city": "广州",
+        "district": "天河区",
+        "category": "Agent 架构师",
+        "salary_min": 23.5,
+        "salary_max": 44.0,
+        "salary_avg": 33.8,
+        "experience": "1-3年",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 09:00:00",
+        "skills": [
+          "MCP",
+          "Agent",
+          "Dify",
+          "Function Calling",
+          "LangGraph",
+          "LLM"
+        ]
+      },
+      {
+        "id": 184,
+        "title": "AI 基础设施工程师",
+        "company": "数聚数智技术有限公司",
+        "city": "广州",
+        "district": "番禺区",
+        "category": "AI 平台与推理工程",
+        "salary_min": 16.2,
+        "salary_max": 30.8,
+        "salary_avg": 23.5,
+        "experience": "经验不限",
+        "education": "大专",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-13 09:00:00",
+        "skills": [
+          "Python",
+          "Kubernetes",
+          "Linux",
+          "FastAPI",
+          "CUDA"
+        ]
+      },
+      {
+        "id": 179,
+        "title": "AI 应用工程师",
+        "company": "千帆智能科技有限公司",
+        "city": "广州",
+        "district": "海珠区",
+        "category": "大模型应用开发",
+        "salary_min": 16.4,
+        "salary_max": 31.1,
+        "salary_avg": 23.8,
+        "experience": "经验不限",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-12 20:00:00",
+        "skills": [
+          "Prompt Engineering",
+          "FastAPI",
+          "RAG",
+          "Function Calling"
+        ]
+      },
+      {
+        "id": 119,
+        "title": "AI 全栈开发工程师",
+        "company": "岭南软件有限公司",
+        "city": "广州",
+        "district": "越秀区",
+        "category": "全栈 AI 开发",
+        "salary_min": 18.6,
+        "salary_max": 34.9,
+        "salary_avg": 26.8,
+        "experience": "3-5年",
+        "education": "不限",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-12 00:00:00",
+        "skills": [
+          "React",
+          "TypeScript",
+          "LLM",
+          "SQL",
+          "Docker",
+          "FastAPI"
+        ]
+      },
+      {
+        "id": 181,
+        "title": "AI 数据研发工程师",
+        "company": "智算人工智能研究院",
+        "city": "广州",
+        "district": "黄埔区",
+        "category": "数据与检索工程",
+        "salary_min": 14.6,
+        "salary_max": 27.4,
+        "salary_avg": 21.0,
+        "experience": "经验不限",
+        "education": "本科",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-11 15:00:00",
+        "skills": [
+          "Python",
+          "SQL",
+          "Embedding",
+          "Milvus",
+          "PostgreSQL"
+        ]
+      }
+    ],
+    "meta": {
+      "sample_size": 85,
+      "total_in_db": 232,
+      "source_counts": {
+        "demo_seed": 232
+      },
+      "has_demo_data": true,
+      "source_note": "公开岗位建模样本（含演示数据，演示环境每日重置）",
+      "updated_at": "2026-04-15 17:00:00"
+    }
+  },
+  "东莞": {
+    "city": "东莞",
+    "cities": [
+      "深圳",
+      "广州",
+      "东莞"
+    ],
+    "kpi": {
+      "total_jobs": 42,
+      "avg_salary": 26.0,
+      "median_salary": 24.4,
+      "fresh_grad_count": 15,
+      "fresh_grad_rate": 35.7,
+      "max_salary": 64.3,
+      "max_salary_job": {
+        "id": 212,
+        "title": "多模态算法工程师",
+        "company": "岭南人工智能研究院",
+        "city": "东莞",
+        "category": "算法工程师",
+        "salary_min": 33.7,
+        "salary_max": 64.3,
+        "salary_avg": 49.0
+      },
+      "weekly_new": 13
+    },
+    "skills_top": [
+      {
+        "skill": "LLM",
+        "count": 24,
+        "rate": 57.1
+      },
+      {
+        "skill": "Python",
+        "count": 24,
+        "rate": 57.1
+      },
+      {
+        "skill": "RAG",
+        "count": 16,
+        "rate": 38.1
+      },
+      {
+        "skill": "FastAPI",
+        "count": 14,
+        "rate": 33.3
+      },
+      {
+        "skill": "CUDA",
+        "count": 9,
+        "rate": 21.4
+      },
+      {
+        "skill": "Dify",
+        "count": 9,
+        "rate": 21.4
+      },
+      {
+        "skill": "Function Calling",
+        "count": 8,
+        "rate": 19.0
+      },
+      {
+        "skill": "LangGraph",
+        "count": 8,
+        "rate": 19.0
+      },
+      {
+        "skill": "Prompt Engineering",
+        "count": 8,
+        "rate": 19.0
+      },
+      {
+        "skill": "Agent",
+        "count": 7,
+        "rate": 16.7
+      }
+    ],
+    "city_compare": [
+      {
+        "city": "深圳",
+        "job_count": 105,
+        "avg_salary": 30.8,
+        "median_salary": 29.4,
+        "fresh_grad_count": 44,
+        "fresh_grad_rate": 41.9
+      },
+      {
+        "city": "广州",
+        "job_count": 85,
+        "avg_salary": 29.1,
+        "median_salary": 29.1,
+        "fresh_grad_count": 36,
+        "fresh_grad_rate": 42.4
+      },
+      {
+        "city": "东莞",
+        "job_count": 42,
+        "avg_salary": 26.0,
+        "median_salary": 24.4,
+        "fresh_grad_count": 15,
+        "fresh_grad_rate": 35.7
+      }
+    ],
+    "exp_salary": [
+      {
+        "experience": "经验不限",
+        "job_count": 6,
+        "avg_salary": 19.6
+      },
+      {
+        "experience": "应届生",
+        "job_count": 7,
+        "avg_salary": 15.9
+      },
+      {
+        "experience": "1年以内",
+        "job_count": 4,
+        "avg_salary": 21.7
+      },
+      {
+        "experience": "1-3年",
+        "job_count": 9,
+        "avg_salary": 23.4
+      },
+      {
+        "experience": "3-5年",
+        "job_count": 11,
+        "avg_salary": 32.0
+      },
+      {
+        "experience": "5年以上",
+        "job_count": 5,
+        "avg_salary": 42.6
+      }
+    ],
+    "category_mix": [
+      {
+        "category": "AI 产品经理",
+        "count": 6,
+        "rate": 14.3
+      },
+      {
+        "category": "AI 平台与推理工程",
+        "count": 6,
+        "rate": 14.3
+      },
+      {
+        "category": "Agent 架构师",
+        "count": 6,
+        "rate": 14.3
+      },
+      {
+        "category": "全栈 AI 开发",
+        "count": 6,
+        "rate": 14.3
+      },
+      {
+        "category": "大模型应用开发",
+        "count": 6,
+        "rate": 14.3
+      },
+      {
+        "category": "其他",
+        "count": 12,
+        "rate": 28.6
+      }
+    ],
+    "latest": [
+      {
+        "id": 207,
+        "title": "AI 全栈开发工程师",
+        "company": "数聚人工智能研究院",
+        "city": "东莞",
+        "district": "南城区",
+        "category": "全栈 AI 开发",
+        "salary_min": 12.1,
+        "salary_max": 22.7,
+        "salary_avg": 17.4,
+        "experience": "经验不限",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-15 00:00:00",
+        "skills": [
+          "FastAPI",
+          "Python",
+          "TypeScript",
+          "SQL",
+          "React"
+        ]
+      },
+      {
+        "id": 218,
+        "title": "LLM 后端开发工程师",
+        "company": "星澜软件有限公司",
+        "city": "东莞",
+        "district": "长安镇",
+        "category": "大模型应用开发",
+        "salary_min": 15.5,
+        "salary_max": 29.3,
+        "salary_avg": 22.4,
+        "experience": "1-3年",
+        "education": "博士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-14 05:00:00",
+        "skills": [
+          "LLM",
+          "Prompt Engineering",
+          "Python",
+          "Function Calling",
+          "VectorDB",
+          "LangGraph"
+        ]
+      },
+      {
+        "id": 205,
+        "title": "大模型微调算法工程师",
+        "company": "原力信息科技有限公司",
+        "city": "东莞",
+        "district": "南城区",
+        "category": "算法工程师",
+        "salary_min": 30.5,
+        "salary_max": 58.3,
+        "salary_avg": 44.4,
+        "experience": "5年以上",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-12 22:00:00",
+        "skills": [
+          "Python",
+          "CUDA",
+          "NLP",
+          "LoRA"
+        ]
+      },
+      {
+        "id": 195,
+        "title": "MLOps 平台工程师",
+        "company": "云岫信息科技有限公司",
+        "city": "东莞",
+        "district": "长安镇",
+        "category": "AI 平台与推理工程",
+        "salary_min": 21.1,
+        "salary_max": 40.0,
+        "salary_avg": 30.6,
+        "experience": "3-5年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-11 14:00:00",
+        "skills": [
+          "Linux",
+          "Python",
+          "Docker",
+          "FastAPI",
+          "CUDA"
+        ]
+      },
+      {
+        "id": 223,
+        "title": "MLOps 平台工程师",
+        "company": "岭南智能科技有限公司",
+        "city": "东莞",
+        "district": "虎门镇",
+        "category": "AI 平台与推理工程",
+        "salary_min": 18.8,
+        "salary_max": 35.7,
+        "salary_avg": 27.2,
+        "experience": "1-3年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-10 15:00:00",
+        "skills": [
+          "FastAPI",
+          "Redis",
+          "vLLM",
+          "CUDA",
+          "Kubernetes",
+          "Linux"
+        ]
+      },
+      {
+        "id": 200,
+        "title": "AIGC 前端与服务端工程师",
+        "company": "华南数智技术有限公司",
+        "city": "东莞",
+        "district": "南城区",
+        "category": "全栈 AI 开发",
+        "salary_min": 9.8,
+        "salary_max": 18.3,
+        "salary_avg": 14.1,
+        "experience": "应届生",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-10 15:00:00",
+        "skills": [
+          "React",
+          "FastAPI",
+          "LLM",
+          "OpenAI API",
+          "TypeScript"
+        ]
+      },
+      {
+        "id": 193,
+        "title": "智能工作流开发工程师",
+        "company": "飞鸟智能科技有限公司",
+        "city": "东莞",
+        "district": "东城区",
+        "category": "全栈 AI 开发",
+        "salary_min": 11.5,
+        "salary_max": 21.5,
+        "salary_avg": 16.5,
+        "experience": "应届生",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-10 09:00:00",
+        "skills": [
+          "TypeScript",
+          "Docker",
+          "SQL",
+          "FastAPI",
+          "Python",
+          "LLM"
+        ]
+      },
+      {
+        "id": 221,
+        "title": "AI 全栈开发工程师",
+        "company": "灵境软件有限公司",
+        "city": "东莞",
+        "district": "南城区",
+        "category": "全栈 AI 开发",
+        "salary_min": 19.2,
+        "salary_max": 36.0,
+        "salary_avg": 27.6,
+        "experience": "3-5年",
+        "education": "硕士",
+        "fresh_grad_friendly": 1,
+        "source": "demo_seed",
+        "created_at": "2026-04-09 18:00:00",
+        "skills": [
+          "Python",
+          "TypeScript",
+          "SQL",
+          "Docker"
+        ]
+      },
+      {
+        "id": 215,
+        "title": "多智能体系统工程师",
+        "company": "原力信息科技有限公司",
+        "city": "东莞",
+        "district": "虎门镇",
+        "category": "Agent 架构师",
+        "salary_min": 24.0,
+        "salary_max": 45.0,
+        "salary_avg": 34.5,
+        "experience": "1-3年",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-09 17:00:00",
+        "skills": [
+          "Dify",
+          "Python",
+          "Function Calling",
+          "MCP",
+          "LangGraph",
+          "LLM"
+        ]
+      },
+      {
+        "id": 212,
+        "title": "多模态算法工程师",
+        "company": "岭南人工智能研究院",
+        "city": "东莞",
+        "district": "松山湖",
+        "category": "算法工程师",
+        "salary_min": 33.7,
+        "salary_max": 64.3,
+        "salary_avg": 49.0,
+        "experience": "5年以上",
+        "education": "硕士",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-09 07:00:00",
+        "skills": [
+          "NLP",
+          "LLM",
+          "CUDA",
+          "Transformers"
+        ]
+      },
+      {
+        "id": 199,
+        "title": "AI 数据研发工程师",
+        "company": "锐思智能科技有限公司",
+        "city": "东莞",
+        "district": "虎门镇",
+        "category": "数据与检索工程",
+        "salary_min": 12.9,
+        "salary_max": 24.2,
+        "salary_avg": 18.6,
+        "experience": "1年以内",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-09 07:00:00",
+        "skills": [
+          "Embedding",
+          "PostgreSQL",
+          "Python",
+          "RAG",
+          "Elasticsearch"
+        ]
+      },
+      {
+        "id": 219,
+        "title": "大模型微调算法工程师",
+        "company": "光年人工智能研究院",
+        "city": "东莞",
+        "district": "东城区",
+        "category": "算法工程师",
+        "salary_min": 32.7,
+        "salary_max": 62.5,
+        "salary_avg": 47.6,
+        "experience": "5年以上",
+        "education": "本科",
+        "fresh_grad_friendly": 0,
+        "source": "demo_seed",
+        "created_at": "2026-04-09 01:00:00",
+        "skills": [
+          "LoRA",
+          "NLP",
+          "Transformers",
+          "LLM"
+        ]
+      }
+    ],
+    "meta": {
+      "sample_size": 42,
+      "total_in_db": 232,
+      "source_counts": {
+        "demo_seed": 232
+      },
+      "has_demo_data": true,
+      "source_note": "公开岗位建模样本（含演示数据，演示环境每日重置）",
+      "updated_at": "2026-04-15 17:00:00"
+    }
+  }
+}

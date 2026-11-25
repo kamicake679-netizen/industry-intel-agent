@@ -88,7 +88,7 @@
 | **Step 1** | 数据层（真实数据优先 + 规范化技能表 + JD 抽取） | **已完成并验收通过** | `app/db/*`, `app/pipeline/extractor.py`, `scripts/test_step1.py` | 入库条数准确（232 条）、3 段 JD 薪资换算准确、`job_skills` 无大小写重复（已实测通过） |
 | **Step 2** | LangGraph Text-to-SQL Agent（三层防线 + 自愈 + SSE） | **已完成并验收通过** | `app/agent/*`, `scripts/test_step2.py` | 6 个用例通过；越权与注入均拦截；执行层单测证明只读与授权器兜底；SSE 与自愈闭环实测通过 |
 | **Step 3** | FastAPI 服务（SSE + 头条 + 简报推送 + 限流预算） | **已完成并验收通过** | `app/services/*`, `app/main.py`, `scripts/test_api.py` | `/docs` 完整，SSE 逐条输出 `node` 与 `final` 事件（已实测通过） |
-| **Step 4** | 设计系统 + 静态高保真稿（Mock 数据，先定长相） | 待开始 | `web/css/*`, `web/js/*`, `web/index.html`, `web/mock/*`, `web/vendor/*` | 1440px & 390px 截图符合编辑部风格，强调色 ≤4 处，数字对齐 |
+| **Step 4** | 设计系统 + 静态高保真稿（Mock 数据，先定长相） | **已完成，待用户确认静态稿** | `web/css/*`, `web/js/*`, `web/index.html`, `web/mock/*`, `web/vendor/*`, `scripts/gen_mock.py`, `docs/design/screenshots/step4_*.png` | 1440px & 390px 截图符合编辑部风格，强调色 ≤4 处，数字对齐（已实测） |
 | **Step 5** | 前端接线（真实接口 + 流式轨迹 + 交互细节） | 待开始 | `web/js/api.js` 及全量接线 | 问询台节点逐个点亮，零控制台报错，全链路交互跑通 |
 | **Step 6** | 视觉 QA 与多视口打磨 | 待开始 | `docs/design/screenshots/*` 与 QA 检查表 | 1440/1280/1024/768/390/375 全视口通过，含五种状态与可访问性 |
 | **Step 7** | Text-to-SQL 自动化消融评测（A/B/C） | 待开始 | `data/eval_sql_dataset.json`, `eval/run_eval.py`, `eval/report_generator.py`, `eval/EVAL_REPORT.md` | 30 题全量实跑，报告数据全部来自真实结果 |

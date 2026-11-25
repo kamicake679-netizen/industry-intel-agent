@@ -1,0 +1,78 @@
+/* 情报简报设计系统：色彩、字体、字号、间距与夜读模式变量 */
+
+:root {
+  /* 纸面与墨色 */
+  --paper: #F3EFE6;
+  --paper-2: #E9E3D6;
+  --ink: #1B1A17;
+  --ink-2: #55514A;
+  --ink-3: #8A847A;
+  --rule: #D6CEBD;
+
+  /* 唯一强调色与功能色 */
+  --accent: #C8401A;
+  --moss: #4E6B4F;
+  --ochre: #B7822A;
+  --blue: #23395B;
+
+  /* 右侧深色问询台 */
+  --desk: #161512;
+  --desk-2: #1F1D19;
+  --desk-fg: #E9E3D6;
+  --desk-mute: #8F887C;
+  --desk-rule: #2E2B26;
+
+  /* 字体栈 */
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --sans: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+
+  /* 字号阶梯（12 / 13 / 15 / 18 / 24 / 40 + KPI 34） */
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-15: 15px;
+  --fs-18: 18px;
+  --fs-24: 24px;
+  --fs-34: 34px;
+  --fs-40: 40px;
+
+  /* 间距阶梯（4 的倍数） */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 28px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* 几何与动效 */
+  --radius: 2px;
+  --dur-fast: 150ms;
+  --dur-mid: 250ms;
+  --dur-chart: 400ms;
+  --backdrop: rgba(27, 26, 23, 0.45);
+}
+
+/* 夜读模式：paper 与 ink 互换，强调色保持朱砂红 */
+[data-theme="night"] {
+  --paper: #141310;
+  --paper-2: #1E1C18;
+  --ink: #E6E0D2;
+  --ink-2: #B3AC9E;
+  --ink-3: #8E877B;
+  --rule: #302C25;
+
+  --moss: #6E916F;
+  --ochre: #CF993C;
+  --blue: #5A7BA6;
+
+  --desk: #0E0D0B;
+  --desk-2: #181613;
+  --desk-fg: #E6E0D2;
+  --desk-mute: #968F82;
+  --desk-rule: #2A2722;
+  --backdrop: rgba(0, 0, 0, 0.65);
+}

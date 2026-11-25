@@ -1,0 +1,286 @@
+{
+  "scenarios": [
+    {
+      "id": "self_heal_rag",
+      "match": ["广州不限经验要求 RAG 的岗位均薪", "RAG", "经验不限"],
+      "question": "广州不限经验、要求 RAG 的岗位，均薪是多少？",
+      "events": [
+        {
+          "event": "node",
+          "data": {
+            "node": "intent_router",
+            "status": "ok",
+            "detail": "识别为数据查询（city=广州, experience=经验不限, skill=RAG）",
+            "ms": 118
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_generator",
+            "status": "ok",
+            "detail": "已生成只读 SQL 草案",
+            "ms": 624,
+            "sql": "SELECT ROUND(AVG(salary_avg), 1) AS avg_k, COUNT(*) AS n\nFROM job_intel\nWHERE city = '广州' AND experience = '经验不限' AND skill = 'RAG';"
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_executor",
+            "status": "retry",
+            "detail": "no such column: skill → 改用 job_skills 关联",
+            "ms": 9
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_generator",
+            "status": "ok",
+            "detail": "自愈重生成 SQL（关联 job_skills 规范化技能表）",
+            "ms": 512,
+            "sql": "SELECT ROUND(AVG(j.salary_avg), 1) AS avg_k,\n       COUNT(*) AS n\nFROM job_intel j\nJOIN job_skills s ON s.job_id = j.id\nWHERE j.city = '广州'\n  AND j.experience = '经验不限'\n  AND s.skill = 'RAG'\nLIMIT 50;"
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_executor",
+            "status": "ok",
+            "detail": "只读执行成功，返回 1 行",
+            "ms": 11
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "insight_synthesizer",
+            "status": "ok",
+            "detail": "已合成结论与对照迷你图",
+            "ms": 438
+          }
+        },
+        {
+          "event": "final",
+          "data": {
+            "question": "广州不限经验、要求 RAG 的岗位，均薪是多少？",
+            "intent": "data_query",
+            "sql": "SELECT ROUND(AVG(j.salary_avg), 1) AS avg_k,\n       COUNT(*) AS n\nFROM job_intel j\nJOIN job_skills s ON s.job_id = j.id\nWHERE j.city = '广州'\n  AND j.experience = '经验不限'\n  AND s.skill = 'RAG'\nLIMIT 50;",
+            "columns": ["avg_k", "n"],
+            "rows": [{"avg_k": 27.4, "n": 9}],
+            "row_count": 1,
+            "answer": "共检索到 **9** 个符合条件的岗位，平均月薪 **27.4K**，比广州全样本均值（29.1K）仅低 1.7K —— 具备 RAG 实战项目即可跨过经验门槛。",
+            "chart": {
+              "type": "bar",
+              "title": "广州不限经验 RAG vs 全市均薪（K）",
+              "labels": ["RAG · 经验不限", "广州全样本"],
+              "values": [27.4, 29.1]
+            },
+            "blocked": false,
+            "block_reason": "",
+            "error": "",
+            "retry_count": 1,
+            "trace": [],
+            "latency_ms": 1712,
+            "tokens": {"prompt_tokens": 910, "completion_tokens": 230, "total_tokens": 1140}
+          }
+        }
+      ]
+    },
+    {
+      "id": "city_compare",
+      "match": ["三城均薪对比", "三城", "均薪对比"],
+      "question": "三城均薪对比",
+      "events": [
+        {
+          "event": "node",
+          "data": {
+            "node": "intent_router",
+            "status": "ok",
+            "detail": "识别为城市横向聚合查询",
+            "ms": 96
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_generator",
+            "status": "ok",
+            "detail": "按 city 分组统计岗位数与平均月薪",
+            "ms": 540,
+            "sql": "SELECT city,\n       COUNT(*) AS job_count,\n       ROUND(AVG(salary_avg), 1) AS avg_k\nFROM job_intel\nGROUP BY city\nORDER BY avg_k DESC\nLIMIT 50;"
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_executor",
+            "status": "ok",
+            "detail": "只读执行成功，返回 3 行",
+            "ms": 8
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "insight_synthesizer",
+            "status": "ok",
+            "detail": "已合成三城对比结论",
+            "ms": 385
+          }
+        },
+        {
+          "event": "final",
+          "data": {
+            "question": "三城均薪对比",
+            "intent": "data_query",
+            "sql": "SELECT city,\n       COUNT(*) AS job_count,\n       ROUND(AVG(salary_avg), 1) AS avg_k\nFROM job_intel\nGROUP BY city\nORDER BY avg_k DESC\nLIMIT 50;",
+            "columns": ["city", "job_count", "avg_k"],
+            "rows": [
+              {"city": "深圳", "job_count": 105, "avg_k": 30.8},
+              {"city": "广州", "job_count": 85, "avg_k": 29.1},
+              {"city": "东莞", "job_count": 42, "avg_k": 26.0}
+            ],
+            "row_count": 3,
+            "answer": "广深莞三城中，**深圳**以 **30.8K**（105 岗）居首，领先广州（29.1K，85 岗）1.7K；**东莞**均薪 **26.0K**（42 岗），与广深形成约 3.1K–4.8K 的梯度差。",
+            "chart": {
+              "type": "bar",
+              "title": "广深莞平均月薪对比（K）",
+              "labels": ["深圳", "广州", "东莞"],
+              "values": [30.8, 29.1, 26.0]
+            },
+            "blocked": false,
+            "block_reason": "",
+            "error": "",
+            "retry_count": 0,
+            "trace": [],
+            "latency_ms": 1029,
+            "tokens": {"prompt_tokens": 740, "completion_tokens": 180, "total_tokens": 920}
+          }
+        }
+      ]
+    },
+    {
+      "id": "exp_salary",
+      "match": ["经验与薪资的关系", "经验", "薪资阶梯"],
+      "question": "经验与薪资的关系",
+      "events": [
+        {
+          "event": "node",
+          "data": {
+            "node": "intent_router",
+            "status": "ok",
+            "detail": "识别为经验阶梯薪资趋势查询",
+            "ms": 104
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_generator",
+            "status": "ok",
+            "detail": "按 experience 分层统计均薪",
+            "ms": 518,
+            "sql": "SELECT experience,\n       COUNT(*) AS job_count,\n       ROUND(AVG(salary_avg), 1) AS avg_k\nFROM job_intel\nGROUP BY experience\nORDER BY avg_k ASC\nLIMIT 50;"
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "sql_executor",
+            "status": "ok",
+            "detail": "只读执行成功，返回 6 行",
+            "ms": 7
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "insight_synthesizer",
+            "status": "ok",
+            "detail": "已合成阶梯折线结论",
+            "ms": 360
+          }
+        },
+        {
+          "event": "final",
+          "data": {
+            "question": "经验与薪资的关系",
+            "intent": "data_query",
+            "sql": "SELECT experience,\n       COUNT(*) AS job_count,\n       ROUND(AVG(salary_avg), 1) AS avg_k\nFROM job_intel\nGROUP BY experience\nORDER BY avg_k ASC\nLIMIT 50;",
+            "columns": ["experience", "job_count", "avg_k"],
+            "rows": [
+              {"experience": "应届生", "job_count": 32, "avg_k": 20.2},
+              {"experience": "1年以内", "job_count": 21, "avg_k": 23.0},
+              {"experience": "经验不限", "job_count": 45, "avg_k": 24.9},
+              {"experience": "1-3年", "job_count": 50, "avg_k": 28.0},
+              {"experience": "3-5年", "job_count": 59, "avg_k": 34.7},
+              {"experience": "5年以上", "job_count": 25, "avg_k": 43.9}
+            ],
+            "row_count": 6,
+            "answer": "薪资随经验呈明显阶梯跃升：应届生均薪 **20.2K**，1–3 年升至 **28.0K**，3–5 年达到 **34.7K**，5 年以上突破 **43.9K**（为应届生的 2.17 倍）。",
+            "chart": {
+              "type": "line",
+              "title": "各经验段平均月薪趋势（K）",
+              "labels": ["应届生", "1年以内", "经验不限", "1-3年", "3-5年", "5年以上"],
+              "values": [20.2, 23.0, 24.9, 28.0, 34.7, 43.9]
+            },
+            "blocked": false,
+            "block_reason": "",
+            "error": "",
+            "retry_count": 0,
+            "trace": [],
+            "latency_ms": 989,
+            "tokens": {"prompt_tokens": 710, "completion_tokens": 175, "total_tokens": 885}
+          }
+        }
+      ]
+    },
+    {
+      "id": "security_block",
+      "match": ["试试 DROP TABLE", "DROP", "DELETE", "UPDATE", "INSERT"],
+      "question": "试试 DROP TABLE",
+      "events": [
+        {
+          "event": "node",
+          "data": {
+            "node": "intent_router",
+            "status": "blocked",
+            "detail": "检测到危险写操作关键词 DROP，已触发只读防线",
+            "ms": 6
+          }
+        },
+        {
+          "event": "node",
+          "data": {
+            "node": "security_fallback",
+            "status": "blocked",
+            "detail": "已返回只读安全拦截说明",
+            "ms": 3
+          }
+        },
+        {
+          "event": "final",
+          "data": {
+            "question": "试试 DROP TABLE",
+            "intent": "blocked",
+            "sql": "",
+            "columns": [],
+            "rows": [],
+            "row_count": 0,
+            "answer": "",
+            "chart": {"type": "none", "title": "", "labels": [], "values": []},
+            "blocked": true,
+            "block_reason": "安全防线已拦截该请求：问询台运行于三层只读防线（SQL 预检、SQLite ?mode=ro 只读连接 + set_authorizer 授权器、2 秒超时控制），仅允许单条 SELECT / WITH 查询。",
+            "error": "",
+            "retry_count": 0,
+            "trace": [],
+            "latency_ms": 9,
+            "tokens": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+          }
+        }
+      ]
+    }
+  ]
+}

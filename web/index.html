@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>INDUSTRY INTEL · 广深莞 AI 岗位情报简报</title>
+  <link rel="preconnect" href="https://fonts.loli.net" crossorigin>
+  <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@700;900&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <script defer src="/static/vendor/echarts.min.js"></script>
+  <script defer src="/static/vendor/marked.min.js"></script>
+  <script defer src="/static/js/echarts-theme.js"></script>
+  <script type="module" src="/static/js/main.js"></script>
+</head>
+<body>
+  <div class="page">
+    <!-- ========== 左：头版简报（8 栏） ========== -->
+    <main class="editorial" id="editorial-main">
+      <!-- 报头 -->
+      <header>
+        <div class="masthead-meta">
+          <span class="kicker">INDUSTRY INTEL · 行业情报简报</span>
+          <span class="mono" id="masthead-issue">第 — 期 · — · 数据更新 —</span>
+        </div>
+        <div class="double-rule" aria-hidden="true"></div>
+        <nav class="nav-bar" aria-label="城市筛选与刊物操作">
+          <div class="tabs" id="city-tabs" role="tablist" aria-label="城市筛选">
+            <button type="button" class="tab on" role="tab" aria-selected="true" data-city="全部">全部</button>
+            <button type="button" class="tab" role="tab" aria-selected="false" data-city="广州">广州</button>
+            <button type="button" class="tab" role="tab" aria-selected="false" data-city="深圳">深圳</button>
+            <button type="button" class="tab" role="tab" aria-selected="false" data-city="东莞">东莞</button>
+          </div>
+          <div class="nav-actions">
+            <button type="button" class="link nav-action-btn" id="btn-open-extract">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              <span>投稿一份 JD</span>
+            </button>
+            <button type="button" class="link nav-action-btn" id="btn-open-brief">生成今日简报</button>
+            <button type="button" class="link nav-action-btn" id="btn-toggle-theme" aria-pressed="false">夜读</button>
+            <button type="button" class="link nav-action-btn" id="btn-open-about">关于本刊</button>
+          </div>
+        </nav>
+      </header>
+
+      <!-- 头条 -->
+      <section class="headline-sec" aria-labelledby="headline-title">
+        <div class="kicker headline-kicker" id="headline-kicker">头条 · 本周观察</div>
+        <h1 class="serif headline-title" id="headline-title">正在编排本期行业情报头版…</h1>
+        <p class="headline-dek" id="headline-dek"></p>
+        <p class="demo-note hidden" id="headline-demo-note">注：当前样本含演示数据，仅作结构化情报与分析能力展示。</p>
+      </section>
+
+      <!-- KPI 四栏 -->
+      <section class="kpi-grid" aria-label="核心指标">
+        <div class="kpi-cell">
+          <div class="kicker">收录岗位</div>
+          <div class="mono kpi-val" id="kpi-total">0</div>
+          <div class="kpi-sub is-moss" id="kpi-weekly">▲ 本周 +0</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kicker">平均月薪</div>
+          <div class="mono kpi-val" id="kpi-avg">0<span class="kpi-unit">K</span></div>
+          <div class="kpi-sub" id="kpi-median">中位数 —</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kicker">应届友好</div>
+          <div class="mono kpi-val is-accent" id="kpi-fresh">0<span class="kpi-unit">%</span></div>
+          <div class="kpi-sub" id="kpi-fresh-count">0 / 0 份</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kicker">最高月薪</div>
+          <div class="mono kpi-val" id="kpi-max">0<span class="kpi-unit">K</span></div>
+          <div class="kpi-sub" id="kpi-max-job">—</div>
+        </div>
+      </section>
+
+      <!-- 图 1 + 表 1 -->
+      <section class="charts-grid" aria-label="技能热点与三城对照">
+        <figure class="col-7">
+          <div class="fig-head">
+            <h2 class="serif fig-title">技能提及率 TOP 10</h2>
+            <span class="kicker">图 1</span>
+          </div>
+          <div class="chart-box" id="chart-skills" role="img" aria-label="技能提及率前十横向条形图"></div>
+          <figcaption class="fig-caption" id="cap-skills">数据来源：公开岗位建模样本 ｜ 一个岗位可提及多项技能</figcaption>
+        </figure>
+
+        <figure class="col-5">
+          <div class="fig-head">
+            <h2 class="serif fig-title">三城对照</h2>
+            <span class="kicker">表 1</span>
+          </div>
+          <table class="intel-table" aria-label="广深莞三城岗位指标对照">
+            <thead>
+              <tr>
+                <th class="kicker" style="text-align:left">城市</th>
+                <th class="kicker num">岗位</th>
+                <th class="kicker num">均薪</th>
+                <th class="kicker num">应届友好</th>
+              </tr>
+            </thead>
+            <tbody class="mono" id="city-compare-body"></tbody>
+          </table>
+          <p class="editor-note" id="editor-note"></p>
+          <figcaption class="fig-caption" id="cap-city">样本范围：深圳、广州、东莞三城全量在招岗位</figcaption>
+        </figure>
+      </section>
+
+      <!-- 图 2 + 图 3 -->
+      <section class="charts-grid" aria-label="经验薪资阶梯与岗位大类构成">
+        <figure class="col-7">
+          <div class="fig-head">
+            <h2 class="serif fig-title">经验—薪资阶梯</h2>
+            <span class="kicker">图 2</span>
+          </div>
+          <div class="chart-box is-compact" id="chart-exp" role="img" aria-label="不同工作经验要求的平均月薪阶梯柱状图"></div>
+          <figcaption class="fig-caption" id="cap-exp">口径：按月薪均值（K）统计，不含年终奖浮动部分</figcaption>
+        </figure>
+
+        <figure class="col-5">
+          <div class="fig-head">
+            <h2 class="serif fig-title">岗位大类构成</h2>
+            <span class="kicker">图 3</span>
+          </div>
+          <div class="chart-box is-compact" id="chart-category" role="img" aria-label="岗位大类占比横向条形图"></div>
+          <figcaption class="fig-caption" id="cap-category">口径：占比前五类别单列，其余合并为“其他”</figcaption>
+        </figure>
+      </section>
+
+      <!-- 最新入库时间线 -->
+      <section class="timeline-sec" aria-labelledby="timeline-heading">
+        <div class="fig-head">
+          <h2 class="serif fig-title" id="timeline-heading">最新入库</h2>
+          <span class="kicker" id="timeline-count">最近 8 条</span>
+        </div>
+        <ol class="timeline-list" id="latest-timeline"></ol>
+      </section>
+
+      <!-- 页脚方法说明 -->
+      <footer class="editorial-footer">
+        <div id="footer-source">数据来源：—</div>
+        <div>方法说明：岗位字段经结构化抽取并入库规范化技能表（job_skills），所有自然语言问询均通过只读数据库连接执行。</div>
+        <div id="footer-reset-note">说明：演示环境每日重置；静态高保真预览当前使用离线模拟数据。</div>
+      </footer>
+    </main>
+
+    <!-- 移动端抽屉遮罩 -->
+    <div class="desk-backdrop" id="desk-backdrop" aria-hidden="true"></div>
+
+    <!-- ========== 右：问询台（4 栏 / 移动端底部抽屉） ========== -->
+    <aside class="desk" id="desk-panel" aria-label="问询台">
+      <div class="desk-handle" aria-hidden="true"><span class="desk-handle-bar"></span></div>
+      <div class="desk-header">
+        <div>
+          <div class="serif desk-title">问询台</div>
+          <div class="desk-subtitle">ASK THE DESK</div>
+        </div>
+        <div class="desk-header-right">
+          <div class="desk-model-badge"><span class="dot is-moss" aria-hidden="true"></span>DeepSeek-V3</div>
+          <button type="button" class="desk-close" id="btn-close-desk" aria-label="收起问询台">收起</button>
+        </div>
+      </div>
+
+      <div class="desk-body" id="desk-messages">
+        <div class="desk-empty" id="desk-empty">
+          可直接向情报库发起自然语言提问，系统将实时展示意图识别、SQL 生成、只读校验与结论合成过程。点击下方示例即可体验。
+        </div>
+      </div>
+
+      <div class="desk-footer">
+        <div class="chips-header" id="chips-header">
+          <button type="button" class="chips-toggle-btn" id="btn-toggle-chips">展开快捷问题</button>
+        </div>
+        <div class="chips-wrap" id="desk-chips">
+          <button type="button" class="chip" data-q="三城均薪对比">三城均薪对比</button>
+          <button type="button" class="chip" data-q="经验与薪资的关系">经验与薪资的关系</button>
+          <button type="button" class="chip" data-q="广州不限经验要求 RAG 的岗位均薪">广州不限经验 RAG 均薪</button>
+          <button type="button" class="chip" data-q="试试 DROP TABLE">试试 DROP TABLE</button>
+        </div>
+        <form class="desk-input-row" id="desk-form">
+          <label for="desk-input" class="sr-only">向情报库提问</label>
+          <textarea
+            id="desk-input"
+            class="desk-input"
+            rows="1"
+            placeholder="向情报库提问…"
+            autocomplete="off"
+          ></textarea>
+          <button type="submit" class="desk-send-btn" id="desk-send-btn">发送</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 移动端底部轻量入口 -->
+  <button type="button" class="mobile-desk-fab" id="btn-open-desk" aria-controls="desk-panel" aria-expanded="false">
+    <span class="serif fab-title">问询台 · ASK</span>
+    <span class="fab-hint">点击向情报库提问</span>
+  </button>
+
+  <!-- ========== 模态框：投稿一份 JD / 生成今日简报 / 关于本刊 ========== -->
+  <div class="modal-backdrop hidden" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-panel" id="modal-panel">
+      <div class="modal-header">
+        <h2 class="serif modal-title" id="modal-title">模态框</h2>
+        <button type="button" class="modal-close" id="btn-close-modal">关闭 Esc</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+</body>
+</html>
