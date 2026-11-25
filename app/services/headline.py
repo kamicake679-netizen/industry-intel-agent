@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import threading
 from datetime import date, datetime
 from pathlib import Path
@@ -27,8 +28,16 @@ _HEADLINE_SYSTEM_PROMPT = """你是一家严肃财经/产业情报刊物《INDUS
 
 硬性要求：
 1. 提到的所有数字（岗位数、均薪、占比、技能提及率等）必须严格来自输入 JSON，严禁编造或推测未提供的数字。
-2. 风格克制、客观、有新闻判断力，不使用感叹号、emoji 或夸张营销词。
-3. 只输出合法 JSON，不要输出 Markdown 代码块。"""
+2. 所有薪资数值（avg_salary、median_salary、max_salary）单位均为【月薪 K（千元/月）】，例如 29.3 表示 29.3K。提及薪资时单位必须写作 K，严禁写成“万”“万元”或“元”。
+3. 风格克制、客观、有新闻判断力，不使用感叹号、emoji 或夸张营销词。
+4. 只输出合法 JSON，不要输出 Markdown 代码块。"""
+
+_INVALID_WAN_RE = re.compile(r"\d+(?:\.\d+)?\s*万")
+
+
+def _contains_invalid_wan_unit(text: str) -> bool:
+    """检测文本中是否误将薪资 K 写成 '数字+万'。"""
+    return bool(_INVALID_WAN_RE.search(text or ""))
 
 
 def clear_headline_cache() -> None:
@@ -114,6 +123,7 @@ def get_headline(
     dashboard = get_dashboard(city=norm_city, db_path=db_path)
     summary_payload = {
         "scope": norm_city or "全部（深圳/广州/东莞）",
+        "salary_unit": "K（千元/月，例如 29.3 表示 29.3K，绝不是 29.3 万）",
         "kpi": dashboard["kpi"],
         "skills_top5": dashboard["skills_top"][:5],
         "city_compare": dashboard["city_compare"],
@@ -148,6 +158,8 @@ def get_headline(
             raw_kicker = str(parsed.get("kicker") or "").strip()
             if not raw_title or not raw_dek:
                 raise ValueError("头条字段缺失")
+            if _contains_invalid_wan_unit(raw_title) or _contains_invalid_wan_unit(raw_dek):
+                raise ValueError("头条薪资单位误写为万")
             headline_fields = {
                 "kicker": _truncate_text(raw_kicker or (f"头条 · {norm_city}观察" if norm_city else "头条 · 本周观察"), 16),
                 "title": _truncate_text(raw_title, 32),
