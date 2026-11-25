@@ -92,7 +92,7 @@
 | **Step 5** | 前端接线（真实接口 + 流式轨迹 + 交互细节） | **已完成并验收通过** | `web/js/api.js`, `web/js/dashboard.js`, `web/js/desk.js`, `web/js/modals.js`, `web/js/main.js`, `web/index.html`, `web/css/components.css` | 问询台节点逐个点亮，零控制台报错，全链路交互跑通（已实测通过） |
 | **Step 6** | 视觉 QA 与多视口打磨 | **已完成并验收通过** | `docs/design/screenshots/step6_*.png`, `web/index.html`, `web/css/*`, `web/js/*` | 1440/1280/1024/768/390/375 全视口通过，五态与夜读模式截图完成，对比度与无障碍达标（已实测通过） |
 | **Step 7** | Text-to-SQL 自动化消融评测（A/B/C） | **已完成并验收通过** | `data/eval_sql_dataset.json`, `eval/run_eval.py`, `eval/report_generator.py`, `eval/EVAL_REPORT.md`, `eval/report.html` | 30 题全量实跑，报告数据全部来自真实结果（已实测通过） |
-| **Step 8** | Docker、README 与魔搭创空间上线 | 待开始 | `Dockerfile`, `.dockerignore`, `README.md` | 本地 Docker 验证通过、密钥零泄漏、双端访问正常 |
+| **Step 8** | Docker、README 与魔搭创空间上线 | **已完成并验收通过** | `Dockerfile`, `.dockerignore`, `README.md` | 魔搭创空间 Docker 构建上线、密钥零泄漏、双端访问正常（已实测通过） |
 
 ---
 

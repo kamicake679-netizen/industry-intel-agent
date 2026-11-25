@@ -2,7 +2,7 @@
 
 > **垂直行业岗位情报采集与对话式分析 Agent** — 结合结构化 JD 抽取、规范化技能表、LangGraph Text-to-SQL（三层只读防线 + SQL 自愈 + SSE 流式轨迹）与编辑部「情报简报」双端看板。
 
-- **魔搭创空间在线体验**：`[待部署后替换为 ModelScope Studio 公网链接](https://modelscope.cn/studios/your-username/industry-intel-agent)`
+- **魔搭创空间在线体验**：[点击进入 ModelScope Studio 在线体验](https://www.modelscope.cn/studios/Kamicake679/industry-intel-agent)
 - **演示环境说明**：演示容器重启后新增投稿数据将重置，页面脚注已注明“含演示数据 / 演示环境每日重置”。
 
 ![产业情报台 1440px 桌面端首页截图](docs/design/screenshots/step6_1440x900.png)
