@@ -689,6 +689,13 @@
   white-space: nowrap;
 }
 
+@media (min-width: 1024px) {
+  .desk-input {
+    white-space: pre-wrap;
+    overflow-y: auto;
+  }
+}
+
 /* 全站唯一实心按钮 */
 .desk-send-btn {
   background: var(--accent);
@@ -703,6 +710,12 @@
 .desk-send-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.desk-send-btn.is-stop {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
 }
 
 .fab-title {
@@ -910,6 +923,168 @@
   height: 14px;
   background: var(--paper-2);
   border-radius: var(--radius);
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.skeleton-headline-title {
+  height: 36px;
+  width: 82%;
+  max-width: 620px;
+  margin-bottom: var(--sp-2);
+}
+
+.skeleton-headline-dek {
+  height: 18px;
+  width: 68%;
+  max-width: 520px;
+}
+
+@keyframes skeleton-shimmer {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bar {
+    animation: none;
+  }
+}
+
+/* 报纸「更正启事」限流与提示条 */
+.notice-banner {
+  margin-top: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-size: var(--fs-13);
+  line-height: 1.5;
+}
+
+.notice-tag {
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.notice-text {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink);
+}
+
+.notice-close {
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  border-bottom: 1px solid transparent;
+  flex-shrink: 0;
+}
+
+.notice-close:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* 三城对照表高亮闪烁 */
+.intel-table tbody tr {
+  transition: background-color var(--dur-mid) ease;
+}
+
+.intel-table tbody tr.is-flash-highlight {
+  background: var(--paper-2);
+}
+
+.intel-table tbody tr.is-flash-highlight td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+  padding-left: var(--sp-2);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 问询台结果预览表与回答操作栏 */
+.desk-result-wrap {
+  border: 1px solid var(--desk-rule);
+  background: var(--desk-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  animation: fade-in var(--dur-mid) ease;
+}
+
+.desk-result-scroll {
+  overflow-x: auto;
+}
+
+.desk-result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-12);
+  color: var(--desk-fg);
+}
+
+.desk-result-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--desk-mute);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--desk-rule);
+  white-space: nowrap;
+}
+
+.desk-result-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--desk-rule);
+  white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.desk-result-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.desk-result-table .num {
+  text-align: right;
+}
+
+.desk-table-toggle {
+  width: 100%;
+  padding: 5px 10px;
+  font-size: var(--fs-12);
+  color: var(--desk-mute);
+  border-top: 1px solid var(--desk-rule);
+  text-align: center;
+  background: transparent;
+}
+
+.desk-table-toggle:hover {
+  color: var(--desk-fg);
+}
+
+.desk-turn-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-top: var(--sp-1);
+}
+
+.desk-action-btn {
+  font-size: var(--fs-12);
+  color: var(--desk-mute);
+  border: 1px solid var(--desk-rule);
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.desk-action-btn:hover {
+  border-color: var(--accent);
+  color: var(--desk-fg);
 }
 
 @keyframes fade-in {

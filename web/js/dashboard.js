@@ -1,5 +1,5 @@
 /**
- * 头版看板渲染：报头、头条、KPI count-up、ECharts 图表、三城表与最新入库时间线。
+ * 头版看板渲染：报头、头条（含骨架屏）、KPI 平滑过渡、ECharts 图表复用、三城表高亮与最新入库时间线。
  */
 
 const chartInstances = {
@@ -9,6 +9,14 @@ const chartInstances = {
 };
 
 let lastDashboardData = null;
+let lastKpi = {
+  total_jobs: 0,
+  avg_salary: 0,
+  fresh_grad_rate: 0,
+  max_salary: 0
+};
+const recentSubmittedIds = new Set();
+let highlightTimer = null;
 
 function prefersReducedMotion() {
   return Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -23,16 +31,16 @@ function escapeHtml(str) {
 }
 
 /**
- * 数字平滑计数动画（600ms，easeOutCubic）。
+ * 数字平滑计数动画（600ms，easeOutCubic），支持从旧值过渡到新值。
  */
-function animateNumber(el, target, decimals = 0, suffixHtml = "") {
+function animateNumber(el, target, decimals = 0, suffixHtml = "", startVal = 0) {
   const endVal = Number(target) || 0;
-  if (prefersReducedMotion()) {
+  const fromVal = Number(startVal) || 0;
+  if (prefersReducedMotion() || fromVal === endVal) {
     el.innerHTML = `${endVal.toFixed(decimals)}${suffixHtml}`;
     return;
   }
 
-  const startVal = 0;
   const duration = 600;
   const startTime = performance.now();
   let finished = false;
@@ -42,13 +50,13 @@ function animateNumber(el, target, decimals = 0, suffixHtml = "") {
       finished = true;
       el.innerHTML = `${endVal.toFixed(decimals)}${suffixHtml}`;
     }
-  }, duration + 40);
+  }, duration + 50);
 
   function frame(now) {
     if (finished) return;
     const progress = Math.min((now - startTime) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
-    const current = startVal + (endVal - startVal) * eased;
+    const current = fromVal + (endVal - fromVal) * eased;
     el.innerHTML = `${current.toFixed(decimals)}${suffixHtml}`;
     if (progress < 1) {
       requestAnimationFrame(frame);
@@ -98,32 +106,35 @@ function getOrCreateChart(key, elId) {
   return chartInstances[key];
 }
 
+function renderSkillsChart(skills, highlightIndex = 0) {
+  const skillsChart = getOrCreateChart("skills", "chart-skills");
+  if (!skillsChart) return;
+  skillsChart.setOption(
+    window.BriefCharts.barOption({
+      labels: skills.map((s) => s.skill),
+      values: skills.map((s) => s.rate),
+      highlightIndex,
+      horizontal: true,
+      unit: "%",
+      fadeAfter: 5
+    }),
+    true
+  );
+  const el = document.getElementById("chart-skills");
+  if (el && skills.length) {
+    el.setAttribute(
+      "aria-label",
+      `技能提及率前十横向条形图：榜首为 ${skills[0].skill}（${skills[0].rate}%）`
+    );
+  }
+}
+
 function renderCharts(data) {
   if (!window.echarts || !window.BriefCharts) return;
 
   // 图 1：技能提及率 TOP 10
   const skills = (data.skills_top || []).slice(0, 10);
-  const skillsChart = getOrCreateChart("skills", "chart-skills");
-  if (skillsChart) {
-    skillsChart.setOption(
-      window.BriefCharts.barOption({
-        labels: skills.map((s) => s.skill),
-        values: skills.map((s) => s.rate),
-        highlightIndex: 0,
-        horizontal: true,
-        unit: "%",
-        fadeAfter: 5
-      }),
-      true
-    );
-    const el = document.getElementById("chart-skills");
-    if (el && skills.length) {
-      el.setAttribute(
-        "aria-label",
-        `技能提及率前十横向条形图：榜首为 ${skills[0].skill}（${skills[0].rate}%）`
-      );
-    }
-  }
+  renderSkillsChart(skills, 0);
 
   // 图 2：经验—薪资阶梯
   const expList = data.exp_salary || [];
@@ -179,11 +190,11 @@ function renderCityTable(compare) {
   tbody.innerHTML = compare
     .map((c) => {
       const isTopFresh = Number(c.fresh_grad_rate) === maxFresh;
-      return `<tr>
+      return `<tr data-city="${escapeHtml(c.city)}">
         <td style="font-family:var(--sans)">${escapeHtml(c.city)}</td>
         <td class="num">${Number(c.job_count)}</td>
-        <td class="num">${Number(c.avg_salary).toFixed(1)}K</td>
-        <td class="num ${isTopFresh ? "is-highlight" : ""}">${Number(c.fresh_grad_rate).toFixed(1)}%</td>
+        <td class="num">${Number(c.avg_salary || 0).toFixed(1)}K</td>
+        <td class="num ${isTopFresh ? "is-highlight" : ""}">${Number(c.fresh_grad_rate || 0).toFixed(1)}%</td>
       </tr>`;
     })
     .join("");
@@ -196,6 +207,29 @@ function renderCityTable(compare) {
   noteEl.innerHTML = `<span class="editor-note-lead">编者按　</span>${escapeHtml(best.city)}的应届友好岗位占比（${Number(best.fresh_grad_rate).toFixed(1)}%）最高，是${escapeHtml(lowest.city)}（${Number(lowest.fresh_grad_rate).toFixed(1)}%）的 ${ratio} 倍，零经验转行者可优先关注。`;
 }
 
+function buildTimelineItemHtml(item) {
+  const isNew = item.source === "user_submit" || recentSubmittedIds.has(item.id);
+  const minK = item.salary_min != null ? Number(item.salary_min).toFixed(0) : "";
+  const maxK = item.salary_max != null ? Number(item.salary_max).toFixed(0) : "";
+  const salaryText = minK && maxK ? `${minK}–${maxK}K` : `${Number(item.salary_avg || 0).toFixed(1)}K`;
+  const timeText = String(item.created_at || "").slice(5, 16) || "刚刚";
+  const skillsText = (item.skills || []).slice(0, 5).join(" · ") || "—";
+
+  return `<li class="timeline-item ${isNew ? "is-new" : ""}" data-job-id="${escapeHtml(item.id ?? "")}">
+    <div class="timeline-top">
+      <div class="timeline-title-wrap">
+        <span class="timeline-job-title">${escapeHtml(item.title)}</span>
+        ${isNew ? '<span class="badge-new">新</span>' : ""}
+      </div>
+      <span class="mono timeline-salary">${escapeHtml(salaryText)}</span>
+    </div>
+    <div class="timeline-meta">
+      <span class="mono">${escapeHtml(timeText)}</span> · ${escapeHtml(item.company || "匿名企业")} · ${escapeHtml(item.city || "大湾区")}${item.district ? " " + escapeHtml(item.district) : ""} · ${escapeHtml(item.experience || "经验不限")}
+    </div>
+    <div class="timeline-skills">技能：${escapeHtml(skillsText)}</div>
+  </li>`;
+}
+
 function renderTimeline(latest) {
   const listEl = document.getElementById("latest-timeline");
   const countEl = document.getElementById("timeline-count");
@@ -206,36 +240,78 @@ function renderTimeline(latest) {
     countEl.textContent = `最近 ${items.length} 条`;
   }
 
-  listEl.innerHTML = items
-    .map((item) => {
-      const isNew = item.source === "user_submit";
-      const minK = item.salary_min != null ? Number(item.salary_min).toFixed(0) : "";
-      const maxK = item.salary_max != null ? Number(item.salary_max).toFixed(0) : "";
-      const salaryText = minK && maxK ? `${minK}–${maxK}K` : `${Number(item.salary_avg || 0).toFixed(1)}K`;
-      const timeText = String(item.created_at || "").slice(5, 16) || "近期";
-      const skillsText = (item.skills || []).slice(0, 5).join(" · ") || "—";
+  if (!items.length) {
+    listEl.innerHTML = '<li class="timeline-item"><div class="timeline-meta">暂无入库岗位数据</div></li>';
+    return;
+  }
 
-      return `<li class="timeline-item ${isNew ? "is-new" : ""}">
-        <div class="timeline-top">
-          <div class="timeline-title-wrap">
-            <span class="timeline-job-title">${escapeHtml(item.title)}</span>
-            ${isNew ? '<span class="badge-new">新</span>' : ""}
-          </div>
-          <span class="mono timeline-salary">${escapeHtml(salaryText)}</span>
-        </div>
-        <div class="timeline-meta">
-          <span class="mono">${escapeHtml(timeText)}</span> · ${escapeHtml(item.company)} · ${escapeHtml(item.city)}${item.district ? " " + escapeHtml(item.district) : ""} · ${escapeHtml(item.experience)}
-        </div>
-        <div class="timeline-skills">技能：${escapeHtml(skillsText)}</div>
-      </li>`;
-    })
-    .join("");
+  listEl.innerHTML = items.map(buildTimelineItemHtml).join("");
 }
 
 /**
- * 渲染完整头版看板。
+ * 在时间线顶部插入新投稿的 JD（带朱砂“新”标记）。
+ * @param {object} job
  */
-export function renderDashboard(data, headline) {
+export function prependSubmittedJob(job) {
+  if (!job) return;
+  if (job.id != null) {
+    recentSubmittedIds.add(job.id);
+  }
+  const listEl = document.getElementById("latest-timeline");
+  const countEl = document.getElementById("timeline-count");
+  if (!listEl) return;
+
+  const existing = job.id != null ? listEl.querySelector(`[data-job-id="${job.id}"]`) : null;
+  if (existing) {
+    existing.remove();
+  }
+
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = buildTimelineItemHtml({ ...job, source: "user_submit" });
+  const newLi = wrapper.firstElementChild;
+  if (newLi) {
+    listEl.prepend(newLi);
+    while (listEl.children.length > 8) {
+      listEl.lastElementChild.remove();
+    }
+    if (countEl) {
+      countEl.textContent = `最近 ${listEl.children.length} 条`;
+    }
+  }
+}
+
+/**
+ * 头条骨架屏占位（排版待印细条，不用旋转圈）。
+ * @param {boolean} isLoading
+ */
+export function setHeadlineLoading(isLoading) {
+  const titleEl = document.getElementById("headline-title");
+  const dekEl = document.getElementById("headline-dek");
+  if (!titleEl || !dekEl) return;
+  if (isLoading) {
+    titleEl.innerHTML = '<div class="skeleton-bar skeleton-headline-title" aria-hidden="true"></div>';
+    dekEl.innerHTML = '<div class="skeleton-bar skeleton-headline-dek" aria-hidden="true"></div>';
+  }
+}
+
+/**
+ * 渲染头条区块。
+ * @param {object} headline
+ */
+export function renderHeadline(headline) {
+  const kickerEl = document.getElementById("headline-kicker");
+  const titleEl = document.getElementById("headline-title");
+  const dekEl = document.getElementById("headline-dek");
+
+  if (kickerEl && headline?.kicker) kickerEl.textContent = headline.kicker;
+  if (titleEl && headline?.title) titleEl.textContent = headline.title;
+  if (dekEl) dekEl.textContent = headline?.dek || "";
+}
+
+/**
+ * 渲染完整头版看板（图表使用 setOption 平滑过渡，KPI 从旧值平滑计数）。
+ */
+export function renderDashboard(data, headline = null) {
   lastDashboardData = data;
   const kpi = data.kpi || {};
   const meta = data.meta || {};
@@ -245,20 +321,17 @@ export function renderDashboard(data, headline) {
     issueEl.textContent = formatIssueMeta(meta.updated_at);
   }
 
-  // 头条
-  const kickerEl = document.getElementById("headline-kicker");
-  const titleEl = document.getElementById("headline-title");
-  const dekEl = document.getElementById("headline-dek");
-  const demoNoteEl = document.getElementById("headline-demo-note");
-
-  if (kickerEl && headline?.kicker) kickerEl.textContent = headline.kicker;
-  if (titleEl && headline?.title) titleEl.textContent = headline.title;
-  if (dekEl && headline?.dek) dekEl.textContent = headline.dek;
-  if (demoNoteEl) {
-    demoNoteEl.classList.toggle("hidden", !meta.has_demo_data);
+  if (headline) {
+    renderHeadline(headline);
   }
 
-  // KPI 四栏
+  const hasDemo = Boolean(meta.has_demo_data);
+  const demoNoteEl = document.getElementById("headline-demo-note");
+  const footerDemoEl = document.getElementById("footer-demo-note");
+  if (demoNoteEl) demoNoteEl.classList.toggle("hidden", !hasDemo);
+  if (footerDemoEl) footerDemoEl.classList.toggle("hidden", !hasDemo);
+
+  // KPI 四栏（从上一次数值平滑 count-up）
   const totalEl = document.getElementById("kpi-total");
   const weeklyEl = document.getElementById("kpi-weekly");
   const avgEl = document.getElementById("kpi-avg");
@@ -268,16 +341,30 @@ export function renderDashboard(data, headline) {
   const maxEl = document.getElementById("kpi-max");
   const maxJobEl = document.getElementById("kpi-max-job");
 
-  if (totalEl) animateNumber(totalEl, kpi.total_jobs || 0, 0);
+  const nextTotal = Number(kpi.total_jobs || 0);
+  const nextAvg = Number(kpi.avg_salary || 0);
+  const nextFresh = Number(kpi.fresh_grad_rate || 0);
+  const nextMax = Number(kpi.max_salary || 0);
+
+  if (totalEl) animateNumber(totalEl, nextTotal, 0, "", lastKpi.total_jobs);
   if (weeklyEl) weeklyEl.textContent = `▲ 本周 +${kpi.weekly_new || 0}`;
-  if (avgEl) animateNumber(avgEl, kpi.avg_salary || 0, 1, '<span class="kpi-unit">K</span>');
+  if (avgEl) animateNumber(avgEl, nextAvg, 1, '<span class="kpi-unit">K</span>', lastKpi.avg_salary);
   if (medianEl) medianEl.textContent = `中位数 ${Number(kpi.median_salary || 0).toFixed(1)}K`;
-  if (freshEl) animateNumber(freshEl, kpi.fresh_grad_rate || 0, 1, '<span class="kpi-unit">%</span>');
+  if (freshEl) animateNumber(freshEl, nextFresh, 1, '<span class="kpi-unit">%</span>', lastKpi.fresh_grad_rate);
   if (freshCntEl) freshCntEl.textContent = `${kpi.fresh_grad_count || 0} / ${kpi.total_jobs || 0} 份`;
-  if (maxEl) animateNumber(maxEl, kpi.max_salary || 0, 1, '<span class="kpi-unit">K</span>');
-  if (maxJobEl && kpi.max_salary_job) {
-    maxJobEl.textContent = `${kpi.max_salary_job.city} · ${kpi.max_salary_job.title}`;
+  if (maxEl) animateNumber(maxEl, nextMax, 1, '<span class="kpi-unit">K</span>', lastKpi.max_salary);
+  if (maxJobEl) {
+    maxJobEl.textContent = kpi.max_salary_job
+      ? `${kpi.max_salary_job.city} · ${kpi.max_salary_job.title}`
+      : "—";
   }
+
+  lastKpi = {
+    total_jobs: nextTotal,
+    avg_salary: nextAvg,
+    fresh_grad_rate: nextFresh,
+    max_salary: nextMax
+  };
 
   // 图表脚注样本量
   const capSkills = document.getElementById("cap-skills");
@@ -293,6 +380,56 @@ export function renderDashboard(data, headline) {
   renderCharts(data);
   renderCityTable(data.city_compare || []);
   renderTimeline(data.latest || []);
+}
+
+export function getCurrentDashboardSnapshot() {
+  return lastDashboardData;
+}
+
+/**
+ * 在左侧看板中高亮指定技能柱或城市行，持续 2 秒后自动恢复。
+ * @param {{ city?: string | null, skill?: string | null }} target
+ */
+export function highlightDashboardTarget({ city = null, skill = null } = {}) {
+  if (!lastDashboardData) return;
+  if (highlightTimer) {
+    clearTimeout(highlightTimer);
+    highlightTimer = null;
+  }
+
+  let scrolled = false;
+  const skills = (lastDashboardData.skills_top || []).slice(0, 10);
+
+  if (skill) {
+    const idx = skills.findIndex((s) => s.skill.toLowerCase() === String(skill).toLowerCase());
+    if (idx !== -1) {
+      renderSkillsChart(skills, idx);
+      const chartEl = document.getElementById("chart-skills");
+      if (chartEl && !scrolled) {
+        chartEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        scrolled = true;
+      }
+    }
+  }
+
+  const flashedRows = [];
+  if (city) {
+    const row = document.querySelector(`#city-compare-body tr[data-city="${CSS.escape(city)}"]`);
+    if (row) {
+      row.classList.add("is-flash-highlight");
+      flashedRows.push(row);
+      if (!scrolled) {
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
+        scrolled = true;
+      }
+    }
+  }
+
+  highlightTimer = setTimeout(() => {
+    renderSkillsChart(skills, 0);
+    flashedRows.forEach((r) => r.classList.remove("is-flash-highlight"));
+    highlightTimer = null;
+  }, 2000);
 }
 
 export function resizeAllCharts() {

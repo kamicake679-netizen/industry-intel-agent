@@ -1,161 +1,258 @@
 /**
- * Step 4 静态高保真稿专用 Mock 数据封装（不请求任何 /api/* 接口）。
- * Step 5 将在此文件内把导出函数替换为真实后端 API 调用，函数签名保持不变。
+ * 真实后端 API 封装：看板、头条、SSE 流式问答（支持 AbortController）、JD 抽取与简报推送。
+ * 统一处理 HTTP 429 限流（联动顶部「更正启事」提示条）与网络异常。
  */
 
-const _mockCache = new Map();
+export class ApiError extends Error {
+  /**
+   * @param {string} message
+   * @param {number} status
+   * @param {string} [errorCode]
+   * @param {number|null} [retryAfter]
+   */
+  constructor(message, status = 0, errorCode = "api_error", retryAfter = null) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.errorCode = errorCode;
+    this.retryAfter = retryAfter;
+  }
+}
+
+let noticeHandler = null;
 
 /**
- * 加载 web/mock/ 下的静态 JSON 文件并缓存。
- * @param {string} name
- * @returns {Promise<any>}
+ * 注册全局接口提示回调（用于 429 限流/额度提示）。
+ * @param {(payload: { tag: string, message: string }) => void} fn
  */
-export async function loadMock(name) {
-  if (_mockCache.has(name)) {
-    return _mockCache.get(name);
+export function setApiNoticeHandler(fn) {
+  noticeHandler = typeof fn === "function" ? fn : null;
+}
+
+function emitRateLimitNotice(message) {
+  if (noticeHandler) {
+    noticeHandler({
+      tag: "更正启事",
+      message: message || "今日演示额度已用完或请求过于频繁，请稍后再试；看板数据仍可正常浏览。"
+    });
   }
-  const p = fetch(`/static/mock/${name}`).then((res) => {
-    if (!res.ok) {
-      throw new Error(`加载 Mock 数据失败: ${name} (${res.status})`);
+}
+
+async function parseErrorResponse(res) {
+  const retryHeader = res.headers.get("Retry-After");
+  const retryAfter = retryHeader ? Number(retryHeader) || null : null;
+  let errorCode = `http_${res.status}`;
+  let message = `请求失败（HTTP ${res.status}）`;
+
+  try {
+    const body = await res.json();
+    if (body && typeof body === "object") {
+      if (body.error) errorCode = String(body.error);
+      if (body.message) message = String(body.message);
+      else if (body.detail) message = String(body.detail);
     }
-    return res.json();
-  });
-  _mockCache.set(name, p);
-  return p;
+  } catch {
+    // 忽略非 JSON 错误体
+  }
+
+  if (res.status === 429) {
+    const rateMsg = `今日演示额度已用完 / ${message}`;
+    emitRateLimitNotice(rateMsg);
+    return new ApiError(rateMsg, 429, errorCode, retryAfter);
+  }
+  return new ApiError(message, res.status, errorCode, retryAfter);
+}
+
+async function requestJson(url, options = {}) {
+  let res;
+  try {
+    res = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        ...(options.headers || {})
+      },
+      ...options
+    });
+  } catch (err) {
+    if (err && err.name === "AbortError") {
+      throw err;
+    }
+    throw new ApiError("网络连接异常，请检查后端服务是否正常运行。", 0, "network_error");
+  }
+
+  if (!res.ok) {
+    throw await parseErrorResponse(res);
+  }
+  return res.json();
 }
 
 /**
- * 获取指定城市的看板聚合数据（Mock）。
+ * 获取服务健康状态与模型/预算信息。
+ */
+export async function getHealth() {
+  return requestJson("/api/health");
+}
+
+/**
+ * 获取指定城市的看板聚合数据。
  * @param {string} city
  */
 export async function getDashboard(city = "全部") {
-  const all = await loadMock("dashboard.json");
-  return all[city] || all["全部"];
+  const qs = city && city !== "全部" ? `?city=${encodeURIComponent(city)}` : "";
+  return requestJson(`/api/dashboard${qs}`);
 }
 
 /**
- * 获取指定城市的头条数据（Mock）。
+ * 获取指定城市的头条数据。
  * @param {string} city
+ * @param {{ refresh?: boolean }} [opts]
  */
-export async function getHeadline(city = "全部") {
-  const all = await loadMock("headline.json");
-  return all[city] || all["全部"];
+export async function getHeadline(city = "全部", opts = {}) {
+  const params = new URLSearchParams();
+  if (city && city !== "全部") {
+    params.set("city", city);
+  }
+  if (opts.refresh) {
+    params.set("refresh", "true");
+  }
+  const qs = params.toString();
+  return requestJson(`/api/headline${qs ? `?${qs}` : ""}`);
 }
 
-function sleep(ms, signal) {
-  return new Promise((resolve, reject) => {
-    if (signal && signal.aborted) {
-      reject(new DOMException("Aborted", "AbortError"));
+/**
+ * 发起 SSE 流式问答：使用 fetch + ReadableStream 解析 event/data 帧。
+ * @param {string} question
+ * @param {Array<{ role: string, content: string }>} history
+ * @param {(eventName: string, data: any) => Promise<void> | void} onEvent
+ * @param {AbortSignal} [signal]
+ */
+export async function chatStream(question, history = [], onEvent, signal) {
+  let res;
+  try {
+    res = await fetch("/api/chat/stream", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/event-stream"
+      },
+      body: JSON.stringify({
+        question,
+        history: Array.isArray(history) ? history : []
+      }),
+      signal
+    });
+  } catch (err) {
+    if (err && err.name === "AbortError") {
+      throw err;
+    }
+    throw new ApiError("问询台连接失败，请确认后端服务已启动。", 0, "network_error");
+  }
+
+  if (!res.ok) {
+    throw await parseErrorResponse(res);
+  }
+
+  if (!res.body) {
+    throw new ApiError("当前浏览器不支持流式响应读取。", 0, "stream_unsupported");
+  }
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let buffer = "";
+
+  const processFrame = async (rawFrame) => {
+    const lines = rawFrame.split("\n");
+    let eventName = "message";
+    const dataLines = [];
+
+    for (const line of lines) {
+      if (!line || line.startsWith(":")) {
+        continue;
+      }
+      if (line.startsWith("event:")) {
+        eventName = line.slice(6).trim() || "message";
+      } else if (line.startsWith("data:")) {
+        dataLines.push(line.slice(5).trimStart());
+      }
+    }
+
+    if (!dataLines.length) {
       return;
     }
-    const timer = setTimeout(resolve, ms);
-    if (signal) {
-      signal.addEventListener(
-        "abort",
-        () => {
-          clearTimeout(timer);
-          reject(new DOMException("Aborted", "AbortError"));
-        },
-        { once: true }
-      );
+
+    const rawData = dataLines.join("\n").trim();
+    if (!rawData) {
+      return;
     }
+
+    let parsed = rawData;
+    try {
+      parsed = JSON.parse(rawData);
+    } catch {
+      // 保留原始文本
+    }
+    await onEvent(eventName, parsed);
+  };
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        break;
+      }
+      const chunk = decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
+      buffer += chunk;
+
+      let sepIndex = buffer.indexOf("\n\n");
+      while (sepIndex !== -1) {
+        const frame = buffer.slice(0, sepIndex);
+        buffer = buffer.slice(sepIndex + 2);
+        if (frame.trim()) {
+          await processFrame(frame);
+        }
+        sepIndex = buffer.indexOf("\n\n");
+      }
+    }
+
+    // 处理解码器残留与末尾未带双换行的最后一帧
+    const tail = decoder.decode().replace(/\r\n/g, "\n");
+    buffer += tail;
+    if (buffer.trim()) {
+      await processFrame(buffer.trim());
+    }
+  } finally {
+    try {
+      reader.releaseLock();
+    } catch {
+      // 忽略已释放的锁
+    }
+  }
+}
+
+/**
+ * 提交原始 JD 文本进行结构化抽取并入库。
+ * @param {string} rawText
+ */
+export async function extractJob(rawText) {
+  return requestJson("/api/extract", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ raw_text: rawText })
   });
 }
 
 /**
- * 模拟 SSE 流式问答：按 300ms 间隔逐步触发 node 与 final 事件。
- * @param {string} question
- * @param {(eventName: string, data: any) => Promise<void> | void} onEvent
- * @param {AbortSignal} [signal]
+ * 生成今日简报并可选推送 Webhook。
+ * @param {{ city?: string, webhookUrl?: string, push?: boolean }} [opts]
  */
-export async function chatStreamMock(question, onEvent, signal) {
-  const sample = await loadMock("chat_stream_sample.json");
-  const scenarios = sample.scenarios || [];
-  const qLower = (question || "").trim().toLowerCase();
-
-  let matched = scenarios.find((sc) =>
-    (sc.match || []).some((kw) => qLower.includes(kw.toLowerCase()))
-  );
-  if (!matched) {
-    matched = scenarios[0];
-  }
-
-  for (const ev of matched.events || []) {
-    if (signal && signal.aborted) {
-      throw new DOMException("Aborted", "AbortError");
-    }
-    await sleep(300, signal);
-    await onEvent(ev.event, ev.data);
-  }
-}
-
-/**
- * 模拟 JD 结构化抽取（600ms 延迟）。
- * @param {string} rawText
- */
-export async function extractMock(rawText) {
-  await sleep(600);
-  const text = (rawText || "").trim();
-  const isGz = text.includes("广州");
-  const isDg = text.includes("东莞");
-  const city = isGz ? "广州" : isDg ? "东莞" : "深圳";
-  const isFresh = text.includes("应届") || text.includes("经验不限") || text.includes("2026");
-
-  return {
-    is_new: true,
-    job: {
-      title: text.includes("Agent") ? "AI Agent 应用开发工程师" : "大模型应用工程师（RAG）",
-      company: isGz ? "珠江智算科技" : "深湾智能实验室",
-      city,
-      district: isGz ? "天河区" : isDg ? "松山湖" : "南山区",
-      category: "AI应用开发",
-      salary_min: isFresh ? 18 : 25,
-      salary_max: isFresh ? 28 : 40,
-      salary_avg: isFresh ? 23.0 : 32.5,
-      experience: isFresh ? "经验不限" : "1-3年",
-      education: "本科",
-      fresh_grad_friendly: isFresh,
-      skills: ["Python", "LLM", "RAG", "LangGraph", "FastAPI"]
-    }
-  };
-}
-
-/**
- * 模拟生成今日简报 Markdown。
- * @param {string} city
- */
-export async function briefMock(city = "全部") {
-  const [dash, head] = await Promise.all([getDashboard(city), getHeadline(city)]);
-  const kpi = dash.kpi || {};
-  const topSkills = (dash.skills_top || []).slice(0, 5);
-  const compare = dash.city_compare || [];
-
-  const lines = [
-    `# INDUSTRY INTEL · 今日行业情报简报（${city}）`,
-    "",
-    `> **${head.title || ""}**`,
-    `> ${head.dek || ""}`,
-    "",
-    "## 一、核心指标",
-    `- 收录岗位：**${kpi.total_jobs ?? 0}** 份（本周新增 +${kpi.weekly_new ?? 0}）`,
-    `- 平均月薪：**${kpi.avg_salary ?? 0}K**（中位数 ${kpi.median_salary ?? 0}K，最高 ${kpi.max_salary ?? 0}K）`,
-    `- 应届友好：**${kpi.fresh_grad_rate ?? 0}%**（${kpi.fresh_grad_count ?? 0} / ${kpi.total_jobs ?? 0} 份）`,
-    "",
-    "## 二、高频技能 TOP 5",
-    ...topSkills.map((s, idx) => `${idx + 1}. **${s.skill}**：提及率 ${s.rate}%（${s.count} 岗）`),
-    "",
-    "## 三、三城横向对照",
-    ...compare.map(
-      (c) => `- **${c.city}**：${c.job_count} 岗 · 均薪 ${c.avg_salary}K · 应届友好 ${c.fresh_grad_rate}%`
-    )
-  ];
-
-  return {
-    mode: "preview",
-    sent: false,
-    platform: "none",
-    status_code: null,
-    markdown: lines.join("\n"),
-    message: "静态稿：当前为预览模式，Step 5 将接入真实 Webhook 推送。"
-  };
+export async function generateBrief({ city = "全部", webhookUrl = "", push = false } = {}) {
+  return requestJson("/api/brief", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      city: city && city !== "全部" ? city : null,
+      webhook_url: webhookUrl && webhookUrl.trim() ? webhookUrl.trim() : null,
+      push: Boolean(push)
+    })
+  });
 }

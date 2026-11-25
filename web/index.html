@@ -43,6 +43,11 @@
             <button type="button" class="link nav-action-btn" id="btn-open-about">关于本刊</button>
           </div>
         </nav>
+        <div class="notice-banner hidden" id="notice-banner" role="alert">
+          <span class="serif notice-tag" id="notice-tag">更正启事</span>
+          <span class="notice-text" id="notice-text"></span>
+          <button type="button" class="notice-close" id="btn-close-notice" aria-label="关闭提示">关闭</button>
+        </div>
       </header>
 
       <!-- 头条 -->
@@ -143,7 +148,8 @@
       <footer class="editorial-footer">
         <div id="footer-source">数据来源：—</div>
         <div>方法说明：岗位字段经结构化抽取并入库规范化技能表（job_skills），所有自然语言问询均通过只读数据库连接执行。</div>
-        <div id="footer-reset-note">说明：演示环境每日重置；静态高保真预览当前使用离线模拟数据。</div>
+        <div id="footer-reset-note">说明：演示环境每日重置；自然语言问询受单 IP 限流与每日调用预算保护。</div>
+        <div class="demo-note hidden" id="footer-demo-note">注：当前样本含演示数据，仅供参考。</div>
       </footer>
     </main>
 
