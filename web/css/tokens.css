@@ -1,25 +1,26 @@
 /* 情报简报设计系统：色彩、字体、字号、间距与夜读模式变量 */
 
 :root {
-  /* 纸面与墨色 */
+  /* 纸面与墨色（均满足 WCAG AA >= 4.5:1 对比度） */
   --paper: #F3EFE6;
   --paper-2: #E9E3D6;
   --ink: #1B1A17;
   --ink-2: #55514A;
-  --ink-3: #8A847A;
+  --ink-3: #68635A;
   --rule: #D6CEBD;
 
   /* 唯一强调色与功能色 */
   --accent: #C8401A;
+  --accent-text: #B83814;
   --moss: #4E6B4F;
   --ochre: #B7822A;
   --blue: #23395B;
 
-  /* 右侧深色问询台 */
+  /* 右侧深色问询台（弱文字对比度 >= 5.5:1） */
   --desk: #161512;
   --desk-2: #1F1D19;
   --desk-fg: #E9E3D6;
-  --desk-mute: #8F887C;
+  --desk-mute: #9E978B;
   --desk-rule: #2E2B26;
 
   /* 字体栈 */
@@ -56,15 +57,17 @@
   --backdrop: rgba(27, 26, 23, 0.45);
 }
 
-/* 夜读模式：paper 与 ink 互换，强调色保持朱砂红 */
+/* 夜读模式：paper 与 ink 互换，强调色微调提亮以确保深底 >= 4.5:1 */
 [data-theme="night"] {
   --paper: #141310;
   --paper-2: #1E1C18;
   --ink: #E6E0D2;
   --ink-2: #B3AC9E;
-  --ink-3: #8E877B;
+  --ink-3: #9E978B;
   --rule: #302C25;
 
+  --accent: #E05A34;
+  --accent-text: #E05A34;
   --moss: #6E916F;
   --ochre: #CF993C;
   --blue: #5A7BA6;
@@ -72,7 +75,7 @@
   --desk: #0E0D0B;
   --desk-2: #181613;
   --desk-fg: #E6E0D2;
-  --desk-mute: #968F82;
+  --desk-mute: #A39C90;
   --desk-rule: #2A2722;
   --backdrop: rgba(0, 0, 0, 0.65);
 }

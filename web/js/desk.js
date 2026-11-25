@@ -220,6 +220,13 @@ function renderResultTable(turnEl, columns, rows) {
   thead.appendChild(headTr);
   table.appendChild(thead);
 
+  // 按列检测小数位，确保同一列数字的小数位数一致
+  const colHasFloat = new Map();
+  columns.forEach((col) => {
+    const hasFloat = rows.some((r) => typeof r[col] === "number" && !Number.isInteger(r[col]));
+    colHasFloat.set(col, hasFloat);
+  });
+
   const tbody = document.createElement("tbody");
   const buildRows = (limit) => {
     const slice = limit ? rows.slice(0, limit) : rows;
@@ -229,7 +236,11 @@ function renderResultTable(turnEl, columns, rows) {
           .map((col) => {
             const val = row[col];
             const isNum = typeof val === "number";
-            const text = val == null ? "—" : isNum && !Number.isInteger(val) ? val.toFixed(1) : String(val);
+            const text = val == null
+              ? "—"
+              : isNum
+                ? (colHasFloat.get(col) ? val.toFixed(1) : String(val))
+                : String(val);
             return `<td class="${isNum ? "num" : ""}" title="${escapeHtml(text)}">${escapeHtml(text)}</td>`;
           })
           .join("");
@@ -275,7 +286,7 @@ function renderMiniChart(turnEl, chart) {
 
   const inst = window.echarts.init(box, "brief-desk");
   inst.setOption(window.BriefCharts.miniOption(chart), true);
-  miniCharts.push(inst);
+  miniCharts.push({ el: box, inst, chart });
 }
 
 function detectDashboardTarget(question, sql, answer) {
@@ -346,8 +357,18 @@ function renderTurnActions(turnEl, { sql, target }) {
 }
 
 export function resizeMiniCharts() {
-  miniCharts.forEach((c) => {
-    if (c) c.resize();
+  miniCharts.forEach((item) => {
+    if (item && item.inst) item.inst.resize();
+  });
+}
+
+export function rerenderMiniChartsForTheme() {
+  if (!window.echarts || !window.BriefCharts) return;
+  miniCharts.forEach((item) => {
+    if (!item || !item.el) return;
+    if (item.inst) item.inst.dispose();
+    item.inst = window.echarts.init(item.el, "brief-desk");
+    item.inst.setOption(window.BriefCharts.miniOption(item.chart), true);
   });
 }
 
@@ -443,8 +464,8 @@ export async function askQuestion(questionText) {
         } else if (eventName === "error") {
           traceList.querySelectorAll(".is-running-row").forEach((el) => el.remove());
           const errBox = document.createElement("div");
-          errBox.className = "desk-blocked-box";
-          errBox.textContent = data?.message || "流式分析异常，请稍后重试。";
+          errBox.className = "desk-error-box";
+          errBox.innerHTML = `<div class="desk-box-head mono">问询异常</div><div>${escapeHtml(data?.message || "流式分析异常，请稍后重试。")}</div>`;
           turnEl.appendChild(errBox);
           scrollDeskToBottom();
         } else if (eventName === "final") {
@@ -457,7 +478,7 @@ export async function askQuestion(questionText) {
           if (data.blocked) {
             const box = document.createElement("div");
             box.className = "desk-blocked-box";
-            box.textContent = data.block_reason || data.answer || "该请求已被只读安全防线拦截。";
+            box.innerHTML = `<div class="desk-box-head mono">只读防线 · 已拦截</div><div>${escapeHtml(data.block_reason || data.answer || "该请求已被只读安全防线拦截。")}</div>`;
             turnEl.appendChild(box);
           } else {
             const ansWrap = document.createElement("div");
@@ -494,8 +515,11 @@ export async function askQuestion(questionText) {
       turnEl.appendChild(stopNote);
     } else {
       const errBox = document.createElement("div");
-      errBox.className = "desk-blocked-box";
-      errBox.textContent = err instanceof ApiError ? err.message : `问询异常：${err?.message || err}`;
+      const isRateLimit = err instanceof ApiError && err.status === 429;
+      errBox.className = isRateLimit ? "desk-blocked-box" : "desk-error-box";
+      const title = isRateLimit ? "限流保护 · 暂缓问询" : "问询异常";
+      const msg = err instanceof ApiError ? err.message : `问询异常：${err?.message || err}`;
+      errBox.innerHTML = `<div class="desk-box-head mono">${title}</div><div>${escapeHtml(msg)}</div>`;
       turnEl.appendChild(errBox);
     }
   } finally {

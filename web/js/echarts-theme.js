@@ -97,6 +97,7 @@
     var highlightIndex = typeof opts.highlightIndex === "number" ? opts.highlightIndex : 0;
     var horizontal = opts.horizontal !== false;
     var unit = opts.unit || "";
+    var decimals = typeof opts.decimals === "number" ? opts.decimals : 1;
     var fadeAfter = opts.fadeAfter === undefined ? 5 : opts.fadeAfter;
     var animDur = prefersReducedMotion() ? 0 : 400;
 
@@ -138,7 +139,7 @@
     return {
       animationDuration: animDur,
       grid: horizontal
-        ? { left: 104, right: 54, top: 8, bottom: 8, containLabel: false }
+        ? { left: 104, right: 56, top: 8, bottom: 8, containLabel: false }
         : { left: 12, right: 12, top: 26, bottom: 28, containLabel: false },
       tooltip: {
         trigger: "axis",
@@ -146,7 +147,8 @@
         formatter: function (params) {
           var item = Array.isArray(params) ? params[0] : params;
           if (!item) return "";
-          return item.name + "：" + item.value + unit;
+          var formatted = Number(item.value || 0).toFixed(decimals);
+          return item.name + "：" + formatted + unit;
         }
       },
       xAxis: horizontal ? valueAxis : categoryAxis,
@@ -159,10 +161,23 @@
           label: {
             show: true,
             position: horizontal ? "right" : "top",
-            color: p.ink,
-            fontFamily: p.mono,
-            fontSize: 12,
-            formatter: "{c}" + unit
+            formatter: function (params) {
+              var num = Number(params.value || 0).toFixed(decimals);
+              return unit ? "{val|" + num + "}{unit|" + unit + "}" : "{val|" + num + "}";
+            },
+            rich: {
+              val: {
+                color: p.ink,
+                fontFamily: p.mono,
+                fontSize: 12
+              },
+              unit: {
+                color: p.ink2,
+                fontFamily: p.mono,
+                fontSize: 10,
+                padding: [0, 0, 0, 1]
+              }
+            }
           }
         }
       ]
@@ -194,6 +209,13 @@
     var labels = chart.labels || [];
     var values = chart.values || [];
     var isLine = chart.type === "line";
+    var hasFloat = values.some(function (v) {
+      return typeof v === "number" && !Number.isInteger(v);
+    });
+    var fmtVal = function (params) {
+      var n = Number(params.value || 0);
+      return hasFloat ? n.toFixed(1) : String(Math.round(n));
+    };
 
     return {
       animationDuration: animDur,
@@ -219,7 +241,7 @@
               symbolSize: 5,
               lineStyle: { color: p.accent, width: 2 },
               itemStyle: { color: p.accent },
-              label: { show: true, position: "top", color: p.deskFg, fontFamily: p.mono, fontSize: 11 }
+              label: { show: true, position: "top", color: p.deskFg, fontFamily: p.mono, fontSize: 11, formatter: fmtVal }
             }
           : {
               type: "bar",
@@ -230,7 +252,7 @@
                   itemStyle: { color: idx === 0 ? p.accent : p.deskMute, borderRadius: 0 }
                 };
               }),
-              label: { show: true, position: "top", color: p.deskFg, fontFamily: p.mono, fontSize: 11 }
+              label: { show: true, position: "top", color: p.deskFg, fontFamily: p.mono, fontSize: 11, formatter: fmtVal }
             }
       ]
     };

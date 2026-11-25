@@ -19,6 +19,7 @@ body {
   font-family: var(--sans);
   font-size: var(--fs-15);
   line-height: 1.75;
+  text-autospace: normal;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -83,10 +84,23 @@ a {
   color: var(--ink);
 }
 
-/* 键盘焦点：朱砂色 2px 可见轮廓 */
+/* 键盘焦点：朱砂色 2px 下划线可见焦点样式 */
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 2px 0 0 var(--accent);
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: inset 0 -2px 0 0 var(--accent);
+}
+
+/* 数值单位：比数字小一号，保持基线对齐 */
+.num-unit {
+  font-size: 0.82em;
+  margin-left: 1px;
+  color: var(--ink-2);
 }
 
 .hidden {

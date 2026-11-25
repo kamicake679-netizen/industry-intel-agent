@@ -8,9 +8,9 @@ import {
   renderDashboard,
   renderHeadline,
   rerenderChartsForTheme,
-  setHeadlineLoading
+  setDashboardLoading
 } from "/static/js/dashboard.js";
-import { askQuestion, closeDrawer, initDesk, openDrawer } from "/static/js/desk.js";
+import { askQuestion, closeDrawer, initDesk, openDrawer, rerenderMiniChartsForTheme } from "/static/js/desk.js";
 import { closeModal, initModals } from "/static/js/modals.js";
 
 const VALID_CITIES = new Set(["全部", "广州", "深圳", "东莞"]);
@@ -36,19 +36,28 @@ function updateQaDataset() {
   });
 }
 
-function showNotice(tag, message) {
+let noticeRetryFn = null;
+
+function showNotice(tag, message, { variant = "ratelimit", onRetry = null } = {}) {
   const banner = document.getElementById("notice-banner");
   const tagEl = document.getElementById("notice-tag");
   const textEl = document.getElementById("notice-text");
+  const retryBtn = document.getElementById("btn-retry-notice");
   if (!banner || !textEl) return;
   if (tagEl && tag) tagEl.textContent = tag;
   textEl.textContent = message;
+  banner.classList.toggle("is-error", variant === "error");
+  noticeRetryFn = typeof onRetry === "function" ? onRetry : null;
+  if (retryBtn) {
+    retryBtn.classList.toggle("hidden", !noticeRetryFn);
+  }
   banner.classList.remove("hidden");
 }
 
 function hideNotice() {
   const banner = document.getElementById("notice-banner");
   if (banner) banner.classList.add("hidden");
+  noticeRetryFn = null;
 }
 
 function syncCityToUrl(city) {
@@ -76,7 +85,8 @@ async function switchCity(city, { syncUrl = true } = {}) {
     syncCityToUrl(currentCity);
   }
 
-  setHeadlineLoading(true);
+  hideNotice();
+  setDashboardLoading(true);
 
   const dashPromise = getDashboard(currentCity)
     .then((dash) => {
@@ -87,7 +97,10 @@ async function switchCity(city, { syncUrl = true } = {}) {
     .catch((err) => {
       if (seq !== switchSeq) return;
       const msg = err instanceof ApiError ? err.message : `看板加载失败：${err?.message || err}`;
-      showNotice("数据提示", msg);
+      showNotice("编务异常", msg, {
+        variant: "error",
+        onRetry: () => switchCity(currentCity, { syncUrl: false })
+      });
       runtimeErrors.push(msg);
     });
 
@@ -132,6 +145,7 @@ function initThemeToggle() {
       btn.textContent = "日读";
     }
     rerenderChartsForTheme();
+    rerenderMiniChartsForTheme();
   });
 }
 
@@ -175,6 +189,12 @@ async function bootstrap() {
   const closeNoticeBtn = document.getElementById("btn-close-notice");
   if (closeNoticeBtn) {
     closeNoticeBtn.addEventListener("click", hideNotice);
+  }
+  const retryNoticeBtn = document.getElementById("btn-retry-notice");
+  if (retryNoticeBtn) {
+    retryNoticeBtn.addEventListener("click", () => {
+      if (noticeRetryFn) noticeRetryFn();
+    });
   }
 
   if (window.BriefCharts) {

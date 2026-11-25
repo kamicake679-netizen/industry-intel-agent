@@ -90,7 +90,7 @@
 | **Step 3** | FastAPI 服务（SSE + 头条 + 简报推送 + 限流预算） | **已完成并验收通过** | `app/services/*`, `app/main.py`, `scripts/test_api.py` | `/docs` 完整，SSE 逐条输出 `node` 与 `final` 事件（已实测通过） |
 | **Step 4** | 设计系统 + 静态高保真稿（Mock 数据，先定长相） | **已完成并验收通过** | `web/css/*`, `web/js/*`, `web/index.html`, `web/mock/*`, `web/vendor/*`, `scripts/gen_mock.py`, `docs/design/screenshots/step4_*.png` | 1440px & 390px 截图符合编辑部风格，强调色 ≤4 处，数字对齐（已实测） |
 | **Step 5** | 前端接线（真实接口 + 流式轨迹 + 交互细节） | **已完成并验收通过** | `web/js/api.js`, `web/js/dashboard.js`, `web/js/desk.js`, `web/js/modals.js`, `web/js/main.js`, `web/index.html`, `web/css/components.css` | 问询台节点逐个点亮，零控制台报错，全链路交互跑通（已实测通过） |
-| **Step 6** | 视觉 QA 与多视口打磨 | 待开始 | `docs/design/screenshots/*` 与 QA 检查表 | 1440/1280/1024/768/390/375 全视口通过，含五种状态与可访问性 |
+| **Step 6** | 视觉 QA 与多视口打磨 | **已完成并验收通过** | `docs/design/screenshots/step6_*.png`, `web/index.html`, `web/css/*`, `web/js/*` | 1440/1280/1024/768/390/375 全视口通过，五态与夜读模式截图完成，对比度与无障碍达标（已实测通过） |
 | **Step 7** | Text-to-SQL 自动化消融评测（A/B/C） | 待开始 | `data/eval_sql_dataset.json`, `eval/run_eval.py`, `eval/report_generator.py`, `eval/EVAL_REPORT.md` | 30 题全量实跑，报告数据全部来自真实结果 |
 | **Step 8** | Docker、README 与魔搭创空间上线 | 待开始 | `Dockerfile`, `.dockerignore`, `README.md` | 本地 Docker 验证通过、密钥零泄漏、双端访问正常 |
 

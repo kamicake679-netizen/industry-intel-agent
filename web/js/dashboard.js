@@ -143,9 +143,11 @@ function renderCharts(data) {
     expChart.setOption(window.BriefCharts.ladderOption(expList), true);
     const el = document.getElementById("chart-exp");
     if (el && expList.length) {
+      const first = expList[0];
+      const last = expList[expList.length - 1];
       el.setAttribute(
         "aria-label",
-        `经验与薪资阶梯柱状图：共 ${expList.length} 个经验分段`
+        `经验与薪资阶梯柱状图：共 ${expList.length} 个经验分段，从 ${first.experience}（${Number(first.avg_salary).toFixed(1)}K）至 ${last.experience}（${Number(last.avg_salary).toFixed(1)}K）`
       );
     }
   }
@@ -193,8 +195,8 @@ function renderCityTable(compare) {
       return `<tr data-city="${escapeHtml(c.city)}">
         <td style="font-family:var(--sans)">${escapeHtml(c.city)}</td>
         <td class="num">${Number(c.job_count)}</td>
-        <td class="num">${Number(c.avg_salary || 0).toFixed(1)}K</td>
-        <td class="num ${isTopFresh ? "is-highlight" : ""}">${Number(c.fresh_grad_rate || 0).toFixed(1)}%</td>
+        <td class="num">${Number(c.avg_salary || 0).toFixed(1)}<span class="num-unit">K</span></td>
+        <td class="num ${isTopFresh ? "is-highlight" : ""}">${Number(c.fresh_grad_rate || 0).toFixed(1)}<span class="num-unit">%</span></td>
       </tr>`;
     })
     .join("");
@@ -204,14 +206,16 @@ function renderCityTable(compare) {
   const lowest = sortedByFresh[sortedByFresh.length - 1];
   const ratio = lowest.fresh_grad_rate > 0 ? (best.fresh_grad_rate / lowest.fresh_grad_rate).toFixed(1) : "1.0";
 
-  noteEl.innerHTML = `<span class="editor-note-lead">编者按　</span>${escapeHtml(best.city)}的应届友好岗位占比（${Number(best.fresh_grad_rate).toFixed(1)}%）最高，是${escapeHtml(lowest.city)}（${Number(lowest.fresh_grad_rate).toFixed(1)}%）的 ${ratio} 倍，零经验转行者可优先关注。`;
+  noteEl.innerHTML = `<span class="editor-note-lead">编者按　</span>${escapeHtml(best.city)}的应届友好岗位占比（<span class="mono">${Number(best.fresh_grad_rate).toFixed(1)}%</span>）最高，是${escapeHtml(lowest.city)}（<span class="mono">${Number(lowest.fresh_grad_rate).toFixed(1)}%</span>）的 <span class="mono">${ratio}</span> 倍，零经验转行者可优先关注。`;
 }
 
 function buildTimelineItemHtml(item) {
   const isNew = item.source === "user_submit" || recentSubmittedIds.has(item.id);
   const minK = item.salary_min != null ? Number(item.salary_min).toFixed(0) : "";
   const maxK = item.salary_max != null ? Number(item.salary_max).toFixed(0) : "";
-  const salaryText = minK && maxK ? `${minK}–${maxK}K` : `${Number(item.salary_avg || 0).toFixed(1)}K`;
+  const salaryHtml = minK && maxK
+    ? `${escapeHtml(minK)}–${escapeHtml(maxK)}<span class="num-unit">K</span>`
+    : `${escapeHtml(Number(item.salary_avg || 0).toFixed(1))}<span class="num-unit">K</span>`;
   const timeText = String(item.created_at || "").slice(5, 16) || "刚刚";
   const skillsText = (item.skills || []).slice(0, 5).join(" · ") || "—";
 
@@ -221,7 +225,7 @@ function buildTimelineItemHtml(item) {
         <span class="timeline-job-title">${escapeHtml(item.title)}</span>
         ${isNew ? '<span class="badge-new">新</span>' : ""}
       </div>
-      <span class="mono timeline-salary">${escapeHtml(salaryText)}</span>
+      <span class="mono timeline-salary">${salaryHtml}</span>
     </div>
     <div class="timeline-meta">
       <span class="mono">${escapeHtml(timeText)}</span> · ${escapeHtml(item.company || "匿名企业")} · ${escapeHtml(item.city || "大湾区")}${item.district ? " " + escapeHtml(item.district) : ""} · ${escapeHtml(item.experience || "经验不限")}
@@ -295,6 +299,27 @@ export function setHeadlineLoading(isLoading) {
 }
 
 /**
+ * 看板加载态骨架占位（印刷待排细条，首次加载时展示）。
+ * @param {boolean} isLoading
+ */
+export function setDashboardLoading(isLoading) {
+  setHeadlineLoading(isLoading);
+  if (!isLoading) return;
+  if (!lastDashboardData) {
+    ["kpi-total", "kpi-avg", "kpi-fresh", "kpi-max"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="skeleton-bar skeleton-kpi" aria-hidden="true"></div>';
+    });
+    const listEl = document.getElementById("latest-timeline");
+    if (listEl) {
+      listEl.innerHTML = [1, 2, 3]
+        .map(() => '<li class="timeline-item"><div class="skeleton-bar skeleton-line" aria-hidden="true"></div></li>')
+        .join("");
+    }
+  }
+}
+
+/**
  * 渲染头条区块。
  * @param {object} headline
  */
@@ -347,11 +372,11 @@ export function renderDashboard(data, headline = null) {
   const nextMax = Number(kpi.max_salary || 0);
 
   if (totalEl) animateNumber(totalEl, nextTotal, 0, "", lastKpi.total_jobs);
-  if (weeklyEl) weeklyEl.textContent = `▲ 本周 +${kpi.weekly_new || 0}`;
+  if (weeklyEl) weeklyEl.innerHTML = `▲ 本周 <span class="mono">+${Number(kpi.weekly_new || 0)}</span>`;
   if (avgEl) animateNumber(avgEl, nextAvg, 1, '<span class="kpi-unit">K</span>', lastKpi.avg_salary);
-  if (medianEl) medianEl.textContent = `中位数 ${Number(kpi.median_salary || 0).toFixed(1)}K`;
+  if (medianEl) medianEl.innerHTML = `中位数 <span class="mono">${Number(kpi.median_salary || 0).toFixed(1)}<span class="num-unit">K</span></span>`;
   if (freshEl) animateNumber(freshEl, nextFresh, 1, '<span class="kpi-unit">%</span>', lastKpi.fresh_grad_rate);
-  if (freshCntEl) freshCntEl.textContent = `${kpi.fresh_grad_count || 0} / ${kpi.total_jobs || 0} 份`;
+  if (freshCntEl) freshCntEl.innerHTML = `<span class="mono">${Number(kpi.fresh_grad_count || 0)} / ${Number(kpi.total_jobs || 0)}</span> 份`;
   if (maxEl) animateNumber(maxEl, nextMax, 1, '<span class="kpi-unit">K</span>', lastKpi.max_salary);
   if (maxJobEl) {
     maxJobEl.textContent = kpi.max_salary_job
@@ -366,15 +391,31 @@ export function renderDashboard(data, headline = null) {
     max_salary: nextMax
   };
 
-  // 图表脚注样本量
+  // 每张图表与对照表的出处与样本量脚注
+  const sourceNote = meta.source_note || "公开招聘岗位";
+  const sampleN = Number(meta.sample_size || 0);
+  const totalN = Number(meta.total_in_db || sampleN);
+
   const capSkills = document.getElementById("cap-skills");
   if (capSkills) {
-    capSkills.textContent = `数据来源：${meta.source_note || "公开招聘岗位"}，n=${meta.sample_size || 0} ｜ 一个岗位可提及多项技能`;
+    capSkills.textContent = `数据来源：${sourceNote}，n=${sampleN} ｜ 一个岗位可提及多项技能`;
+  }
+  const capCity = document.getElementById("cap-city");
+  if (capCity) {
+    capCity.textContent = `数据来源：${sourceNote}，全库 n=${totalN} ｜ 广深莞三城在招岗位对照`;
+  }
+  const capExp = document.getElementById("cap-exp");
+  if (capExp) {
+    capExp.textContent = `数据来源：${sourceNote}，n=${sampleN} ｜ 按月薪均值（K）统计，不含年终奖`;
+  }
+  const capCategory = document.getElementById("cap-category");
+  if (capCategory) {
+    capCategory.textContent = `数据来源：${sourceNote}，n=${sampleN} ｜ 前五类别单列，其余合并为“其他”`;
   }
 
   const footerSource = document.getElementById("footer-source");
   if (footerSource) {
-    footerSource.textContent = `数据来源：${meta.source_note || "公开岗位样本"}（当前视图样本量 n=${meta.sample_size || 0}，全库 ${meta.total_in_db || 0} 份）。`;
+    footerSource.textContent = `数据来源：${sourceNote}（当前视图样本量 n=${sampleN}，全库 ${totalN} 份）。`;
   }
 
   renderCharts(data);
