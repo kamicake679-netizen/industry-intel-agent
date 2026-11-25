@@ -1,0 +1,31 @@
+# 环境变量与本地密钥（严禁打入镜像）
+.env
+.env.*
+!.env.example
+
+# 虚拟环境与缓存
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 版本控制与编辑器
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 运行时数据库与评测大图/产物（减小镜像体积）
+data/*.db
+data/*.db-wal
+data/*.db-shm
+eval/
+docs/
+README.md
+AGENTS.md
