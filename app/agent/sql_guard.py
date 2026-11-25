@@ -464,7 +464,10 @@ def execute_readonly_sql(
     except (sqlite3.DatabaseError, sqlite3.Warning) as exc:
         err_msg = str(exc)
         if timed_out or "interrupted" in err_msg.lower():
-            result["error"] = f"查询执行超时（超过 {timeout_seconds:.1f} 秒），已安全中止。"
+            timeout_msg = f"查询执行超时（超过 {timeout_seconds:.1f} 秒），已安全中止。"
+            result["blocked"] = True
+            result["block_reason"] = timeout_msg
+            result["error"] = timeout_msg
             return result
 
         if authorizer_denials or "not authorized" in err_msg.lower() or "readonly database" in err_msg.lower():
