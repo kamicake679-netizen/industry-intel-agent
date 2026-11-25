@@ -7,10 +7,13 @@ ENV TZ=Asia/Shanghai \
 
 WORKDIR /app
 
-# 配置国内 pip 镜像源并安装依赖
+# 配置阿里云 PyPI 镜像主源 + 官方 PyPI 备源（兼容魔搭香港/国内构建节点）并安装依赖
 COPY requirements.txt ./
-RUN pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && \
-    pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --no-cache-dir \
+    -i https://mirrors.aliyun.com/pypi/simple/ \
+    --extra-index-url https://pypi.org/simple \
+    --trusted-host mirrors.aliyun.com \
+    -r requirements.txt
 
 # 复制应用代码、静态资源（含 web/vendor）与种子/原始数据
 COPY app ./app
