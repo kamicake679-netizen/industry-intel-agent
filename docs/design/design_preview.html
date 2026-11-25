@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+<style>
+  .brief {
+    --paper:#F3EFE6; --paper-2:#E9E3D6; --ink:#1B1A17; --ink-2:#55514A; --ink-3:#8A847A;
+    --rule:#D6CEBD; --accent:#C8401A; --blue:#23395B; --moss:#4E6B4F; --ochre:#B7822A;
+    --desk:#161512; --desk-2:#1F1D19; --desk-fg:#E9E3D6; --desk-mute:#8F887C; --desk-rule:#2E2B26;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+    --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    --mono:"JetBrains Mono","Cascadia Mono","Consolas",ui-monospace,monospace;
+    background:var(--paper); color:var(--ink); font-family:var(--sans);
+  }
+  .serif{font-family:var(--serif)} .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .rule{border-color:var(--rule)} .double{border-top:3px double var(--ink)}
+  .kicker{font-size:12px;letter-spacing:.14em;color:var(--ink-3)}
+  .bar{height:10px;background:var(--ink-2)} .bar.hot{background:var(--accent)}
+  .desk{background:var(--desk);color:var(--desk-fg)}
+  .desk .mute{color:var(--desk-mute)} .desk .drule{border-color:var(--desk-rule)}
+  .dot{width:8px;height:8px;border-radius:999px;display:inline-block}
+  .pulse{animation:p 1.4s ease-in-out infinite}
+  @keyframes p{0%,100%{opacity:1}50%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+  .chip{border:1px solid var(--desk-rule);padding:4px 10px;font-size:12px;color:var(--desk-fg)}
+  .chip:hover{border-color:var(--accent);color:#fff}
+  .link{background-image:linear-gradient(currentColor,currentColor);background-size:0 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .25s}
+  .link:hover{background-size:100% 1px}
+  .tab{font-size:13px;padding:2px 0;color:var(--ink-3)} .tab.on{color:var(--ink);border-bottom:2px solid var(--accent)}
+</style>
+</head>
+<body class="m-0 p-0">
+<div class="brief">
+  <div class="max-w-[1320px] mx-auto grid grid-cols-12 min-h-[880px]">
+
+    <!-- ========== 左：头版 ========== -->
+    <main class="col-span-12 lg:col-span-8 px-10 py-8">
+      <!-- 报头 -->
+      <div class="flex items-end justify-between text-xs" style="color:var(--ink-3)">
+        <span class="kicker">INDUSTRY INTEL · 行业情报简报</span>
+        <span class="mono">第 047 期 · 2026-11-25 周三 · 数据更新 08:00</span>
+      </div>
+      <div class="double mt-3"></div>
+      <div class="flex items-center justify-between py-2 border-b rule">
+        <div class="flex gap-6">
+          <span class="tab on">全部</span><span class="tab">广州</span><span class="tab">深圳</span><span class="tab">东莞</span>
+        </div>
+        <div class="flex gap-5 text-[13px]" style="color:var(--ink-2)">
+          <a class="link cursor-pointer">＋ 投稿一份 JD</a>
+          <a class="link cursor-pointer">生成今日简报</a>
+          <a class="link cursor-pointer">关于本刊</a>
+        </div>
+      </div>
+
+      <!-- 头条 -->
+      <section class="pt-7 pb-6 border-b rule">
+        <div class="kicker mb-3" style="color:var(--accent)">头条 · 本周观察</div>
+        <h1 class="serif text-[40px] leading-[1.25] font-bold tracking-tight max-w-[760px]">
+          RAG 需求过半，应届友好岗不足三成：广深莞 AI 招聘进入“要能交付”的阶段
+        </h1>
+        <p class="mt-4 text-[15px] leading-7 max-w-[680px]" style="color:var(--ink-2)">
+          基于 232 份在招岗位的结构化分析。深圳均薪领先广州 3.1K，但广州“经验不限”岗位占比更高；
+          Agent 与 Dify 是近四周提及率上升最快的两个技能。
+        </p>
+      </section>
+
+      <!-- KPI -->
+      <section class="grid grid-cols-4 border-b rule">
+        <div class="py-5 pr-5">
+          <div class="kicker">收录岗位</div>
+          <div class="mono text-[34px] leading-none mt-2">232</div>
+          <div class="text-xs mt-2" style="color:var(--moss)">▲ 本周 +12</div>
+        </div>
+        <div class="py-5 px-5 border-l rule">
+          <div class="kicker">平均月薪</div>
+          <div class="mono text-[34px] leading-none mt-2">15.6<span class="text-lg">K</span></div>
+          <div class="text-xs mt-2" style="color:var(--ink-3)">中位数 14.0K</div>
+        </div>
+        <div class="py-5 px-5 border-l rule">
+          <div class="kicker">应届友好</div>
+          <div class="mono text-[34px] leading-none mt-2" style="color:var(--accent)">27.6<span class="text-lg">%</span></div>
+          <div class="text-xs mt-2" style="color:var(--ink-3)">64 / 232 份</div>
+        </div>
+        <div class="py-5 pl-5 border-l rule">
+          <div class="kicker">最高月薪</div>
+          <div class="mono text-[34px] leading-none mt-2">45<span class="text-lg">K</span></div>
+          <div class="text-xs mt-2" style="color:var(--ink-3)">深圳 · 大模型算法</div>
+        </div>
+      </section>
+
+      <!-- 图表区 -->
+      <section class="grid grid-cols-12 gap-10 pt-6">
+        <figure class="col-span-7 m-0">
+          <div class="flex items-baseline justify-between">
+            <h3 class="serif text-lg font-bold">技能提及率 TOP 8</h3>
+            <span class="kicker">图 1</span>
+          </div>
+          <div class="mt-4 space-y-[11px] text-[13px]">
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>Python</span><div class="bar hot" style="width:100%"></div><span class="mono text-right">68%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>LLM</span><div class="bar" style="width:98%"></div><span class="mono text-right">67%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>Agent</span><div class="bar" style="width:87%"></div><span class="mono text-right">59%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>RAG</span><div class="bar" style="width:81%"></div><span class="mono text-right">55%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>Prompt 工程</span><div class="bar" style="width:72%"></div><span class="mono text-right">49%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>FastAPI</span><div class="bar" style="width:46%;opacity:.55"></div><span class="mono text-right">31%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>Dify</span><div class="bar" style="width:41%;opacity:.55"></div><span class="mono text-right">28%</span></div>
+            <div class="grid grid-cols-[110px_1fr_44px] items-center gap-3"><span>Function Calling</span><div class="bar" style="width:35%;opacity:.55"></div><span class="mono text-right">24%</span></div>
+          </div>
+          <figcaption class="text-xs mt-4 pt-2 border-t rule" style="color:var(--ink-3)">数据来源：公开招聘岗位，n=232，2026.11 ｜ 一个岗位可提及多项技能</figcaption>
+        </figure>
+
+        <figure class="col-span-5 m-0">
+          <div class="flex items-baseline justify-between">
+            <h3 class="serif text-lg font-bold">三城对照</h3>
+            <span class="kicker">表 1</span>
+          </div>
+          <table class="w-full mt-4 text-[13px] border-collapse">
+            <thead><tr class="border-b-2" style="border-color:var(--ink)">
+              <th class="text-left font-normal kicker pb-2">城市</th>
+              <th class="text-right font-normal kicker pb-2">岗位</th>
+              <th class="text-right font-normal kicker pb-2">均薪</th>
+              <th class="text-right font-normal kicker pb-2">应届友好</th>
+            </tr></thead>
+            <tbody class="mono">
+              <tr class="border-b rule"><td class="py-3" style="font-family:var(--sans)">深圳</td><td class="text-right">118</td><td class="text-right">17.3K</td><td class="text-right">21%</td></tr>
+              <tr class="border-b rule"><td class="py-3" style="font-family:var(--sans)">广州</td><td class="text-right">84</td><td class="text-right">14.2K</td><td class="text-right" style="color:var(--accent)">36%</td></tr>
+              <tr class="border-b rule"><td class="py-3" style="font-family:var(--sans)">东莞</td><td class="text-right">30</td><td class="text-right">12.1K</td><td class="text-right">30%</td></tr>
+            </tbody>
+          </table>
+          <p class="text-[13px] leading-6 mt-4" style="color:var(--ink-2)">
+            <span class="serif font-bold" style="color:var(--ink)">编者按　</span>广州的应届友好占比是深圳的 1.7 倍，对零实习的转行者更值得优先投递。
+          </p>
+        </figure>
+      </section>
+      <p class="text-xs mt-8" style="color:var(--ink-3)">* 设计预览，数字为示意数据</p>
+    </main>
+
+    <!-- ========== 右：问询台 ========== -->
+    <aside class="desk col-span-12 lg:col-span-4 flex flex-col">
+      <div class="px-6 py-5 border-b drule flex items-center justify-between">
+        <div>
+          <div class="serif text-lg font-bold">问询台</div>
+          <div class="text-xs mute mt-0.5 tracking-[.14em]">ASK THE DESK</div>
+        </div>
+        <div class="text-xs mute flex items-center gap-2"><span class="dot" style="background:var(--moss)"></span>DeepSeek-V3</div>
+      </div>
+
+      <div class="flex-1 px-6 py-5 space-y-5 text-[13px]">
+        <div>
+          <div class="text-xs mute mb-1">问</div>
+          <div class="text-[15px] leading-7">广州不限经验、要求 RAG 的岗位，均薪是多少？</div>
+        </div>
+
+        <!-- 执行轨迹 -->
+        <div class="border-l drule pl-4 space-y-3">
+          <div class="flex items-start gap-3"><span class="dot mt-1.5" style="background:var(--desk-mute)"></span>
+            <div class="flex-1 flex justify-between"><span><span class="mono">intent_router</span> <span class="mute">→ 数据查询</span></span><span class="mono mute">118ms</span></div></div>
+          <div class="flex items-start gap-3"><span class="dot mt-1.5" style="background:var(--desk-mute)"></span>
+            <div class="flex-1 flex justify-between"><span class="mono">sql_generator</span><span class="mono mute">842ms</span></div></div>
+          <div class="flex items-start gap-3"><span class="dot mt-1.5" style="background:var(--ochre)"></span>
+            <div class="flex-1">
+              <div class="flex justify-between"><span><span class="mono">sql_executor</span> <span style="color:var(--ochre)">自愈 ×1</span></span><span class="mono mute">9ms</span></div>
+              <div class="mono text-xs mute mt-1">no such column: skill → 改用 job_skills 关联</div>
+            </div></div>
+          <div class="flex items-start gap-3"><span class="dot mt-1.5" style="background:var(--desk-mute)"></span>
+            <div class="flex-1 flex justify-between"><span><span class="mono">sql_executor</span> <span class="mute">返回 1 行</span></span><span class="mono mute">11ms</span></div></div>
+          <div class="flex items-start gap-3"><span class="dot mt-1.5 pulse" style="background:var(--accent)"></span>
+            <div class="flex-1 flex justify-between"><span class="mono">insight_synthesizer</span><span class="mono" style="color:var(--accent)">生成中…</span></div></div>
+        </div>
+
+        <pre class="mono text-xs leading-5 p-3 m-0 overflow-x-auto" style="background:var(--desk-2)"><span class="mute">-- 只读连接 · 已自动限制 LIMIT</span>
+SELECT ROUND(AVG(j.salary_avg),1) AS avg_k,
+       COUNT(*) AS n
+FROM job_intel j
+JOIN job_skills s ON s.job_id = j.id
+WHERE j.city = '广州'
+  AND j.experience = '经验不限'
+  AND s.skill = 'RAG';</pre>
+
+        <div>
+          <div class="text-xs mute mb-1">答</div>
+          <div class="text-[15px] leading-7">
+            共 <span class="mono" style="color:#fff">19</span> 个岗位，平均月薪 <span class="mono" style="color:var(--accent)">13.4K</span>，
+            比全市均值低 0.8K —— 门槛更低的代价并不大。
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-5 border-t drule">
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span class="chip cursor-pointer">三城均薪对比</span>
+          <span class="chip cursor-pointer">经验与薪资的关系</span>
+          <span class="chip cursor-pointer">试试 DROP TABLE</span>
+        </div>
+        <div class="flex items-center border drule px-3 py-2.5">
+          <input class="flex-1 bg-transparent outline-none text-[14px] placeholder:text-[var(--desk-mute)]" placeholder="向情报库提问…">
+          <span class="mono text-xs mute">↵</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+</body>
+</html>
