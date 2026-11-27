@@ -69,22 +69,21 @@ function animateNumber(el, target, decimals = 0, suffixHtml = "", startVal = 0) 
   requestAnimationFrame(frame);
 }
 
-function formatIssueMeta(updatedAt) {
-  const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((now - startOfYear) / 86400000);
+function formatIssueMeta(_updatedAt) {
+  // 统一按中国标准时间（UTC+8）计算期号、日期与星期，避免海外时区偏差
+  const utcMs = Date.now() + new Date().getTimezoneOffset() * 60000;
+  const cnNow = new Date(utcMs + 8 * 3600000);
+  const startOfYear = new Date(cnNow.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((cnNow - startOfYear) / 86400000);
   const issueNo = String(dayOfYear).padStart(3, "0");
 
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, "0");
-  const dd = String(now.getDate()).padStart(2, "0");
+  const yyyy = cnNow.getFullYear();
+  const mm = String(cnNow.getMonth() + 1).padStart(2, "0");
+  const dd = String(cnNow.getDate()).padStart(2, "0");
   const weekNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-  const week = weekNames[now.getDay()];
+  const week = weekNames[cnNow.getDay()];
 
-  let timeStr = "08:00";
-  if (updatedAt && String(updatedAt).includes(" ")) {
-    timeStr = String(updatedAt).split(" ")[1].slice(0, 5);
-  }
+  const timeStr = "07:00";
   return `第 ${issueNo} 期 · ${yyyy}-${mm}-${dd} ${week} · 数据更新 ${timeStr}`;
 }
 

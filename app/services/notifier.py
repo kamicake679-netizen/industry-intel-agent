@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -23,7 +23,7 @@ def generate_brief(city: str | None = None, db_path: Path = DB_PATH) -> str:
     kpi = dashboard["kpi"]
     meta = dashboard["meta"]
     scope = norm_city or "广深莞全库"
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+    now_str = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
 
     avg_str = f"{kpi['avg_salary']:.1f}K" if kpi["avg_salary"] is not None else "--"
     med_str = f"{kpi['median_salary']:.1f}K" if kpi["median_salary"] is not None else "--"
